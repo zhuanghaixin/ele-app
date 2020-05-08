@@ -28,9 +28,18 @@ const router = new VueRouter({
 })
 
 // 路由守卫
-//  router.beforeEach(to,from,next){
-//
-//  }
+ router.beforeEach((to,from,next)=> {
+     const isLogin = localStorage.ele_login ? true : false
+     if (to.path=='/login') {
+        next()
+     }else{
+         //是否在登录状态下
+         isLogin?next():next("/login")
+     }
+ }
+ )
+
+
 
 
 
