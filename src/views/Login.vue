@@ -11,12 +11,13 @@
                 :btnTitle="btnTitle"
                 :disabled="disabled"
                 :error="errors.phone"
+                @btnClick="getVerifyCode"
         >
         </InputGroup>
 <!--        验证码-->
         <InputGroup
                 type="number"
-                v-model="phone"
+                v-model="verifyCode"
                 placeholder="验证码"
                 :error="errors.code"
         >
@@ -52,6 +53,57 @@
         components:{
             InputGroup
         },
+        methods:{
+            //获取验证码
+            getVerifyCode(){
+                //判断当前手机号是否合法
+
+                if(this.validatePhone()){
+                    //发送网路请求
+
+                    this.validateBtn()
+
+                }
+            },
+            // 验证手机号是否合法
+            validatePhone(){
+                if(!this.phone){
+                    console.log(11233)
+                    console.log(this.phone)
+                    this.errors={
+                        phone:'手机号码不能为空'
+                    }
+                    return false;
+                }else if(!/^1[345678]\d{9}$/.test(this.phone)){
+                    console.log(this.phone)
+                    this.errors = {
+                        phone: "请填写正确的手机号码"
+                    };
+                    return false;
+                }else{
+                    this.errors = {}
+                    return true
+                }
+            },
+            //实现 验证码 倒计时
+
+            validateBtn() {
+                let time = 120;
+                let timer = setInterval(() => {
+                    if (time == 0) {
+                        clearInterval(timer)
+                        this.btnTitle = "获取验证码"
+                        this.disabled = false
+                    } else {
+                        //倒计时
+                        this.btnTitle = time + "秒后重试"
+                        this.disabled = true
+                        time--
+                    }
+                }, 1000)
+            }
+        }
+
 
 
 

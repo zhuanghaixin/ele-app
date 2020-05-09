@@ -2,8 +2,8 @@
     <div class="text-group">
 <!--        组件结构-->
 <!--        组件容器-->
-        <div class="input-group">
-            <input :type="type" :value="value" :placeholder="placeholder" :name="name" @input="$emit('input',$emit.target.value)">
+        <div class="input-group" :class="{'is-invalid':error}">
+            <input :type="type" :value="value" :placeholder="placeholder" :name="name" @input="$emit('input',$event.target.value)">
             <!--        输入框后面的按钮-->
             <button v-if="btnTitle" :disabled="disabled" @click="$emit('btnClick')">{{btnTitle}}</button>
             <!--        错误提醒-->
@@ -33,6 +33,7 @@
 </script>
 
 <style scoped>
+
     .input-group {
         border: 1px solid #ccc;
         border-radius: 4px;
@@ -60,5 +61,7 @@
     .invalid-feedback {
         color: red;
         padding-top: 5px;
+        display: flex;
+
     }
 </style>
