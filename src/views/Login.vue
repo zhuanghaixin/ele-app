@@ -18,7 +18,7 @@
         <InputGroup
                 type="number"
                 v-model="verifyCode"
-                placeholder="验证码  880265  查看控制台获取验证码"
+                placeholder="验证码:880265 查看控制台"
                 :error="errors.code"
         >
         </InputGroup>
@@ -137,7 +137,7 @@
                     //设置登录状态 并跳转
                     //本地存储登录状态
                     localStorage.setItem("ele_login",true)
-                    this.$router.push({name:'index'})
+                    this.$router.push('/')
                 }).catch((err)=>{
                     //返回错误信息
                     console.log(err)
