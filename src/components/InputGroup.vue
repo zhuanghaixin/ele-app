@@ -3,7 +3,7 @@
 <!--        组件结构-->
 <!--        组件容器-->
         <div class="input-group" :class="{'is-invalid':error}">
-            <input :type="type" :value="value" :placeholder="placeholder" :name="name" @input="$emit('input',$event.target.value)">
+            <input :type="type" :value="value" :placeholder="placeholder" :name="name" @input="$emit('input',$event.target.value)" >
             <!--        输入框后面的按钮-->
             <button v-if="btnTitle" :disabled="disabled" @click="$emit('btnClick')">{{btnTitle}}</button>
             <!--        错误提醒-->
@@ -46,11 +46,14 @@
         height: 100%;
         width: 60%;
         outline: none;
+        border:none;
+        font-size:16px;
     }
     .input-group button {
         border: none;
         outline: none;
         background: #fff;
+        font-size:16px;
     }
     .input-group button[disabled] {
         color: #aaa;

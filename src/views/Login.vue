@@ -8,18 +8,20 @@
                 type="number"
                 v-model="phone"
                 placeholder="手机号"
-                :btnTitle="btnTitle"
-                :disabled="disabled"
+
                 :error="errors.phone"
-                @btnClick="getVerifyCode"
+
         >
         </InputGroup>
         <!--        验证码-->
         <InputGroup
                 type="number"
                 v-model="verifyCode"
-                placeholder="验证码:880265 查看控制台"
+                placeholder="验证码:880265"
                 :error="errors.code"
+                :btnTitle="btnTitle"
+                :disabled="disabled"
+                @btnClick="getVerifyCode"
         >
         </InputGroup>
         <!-- 用户服务协议 -->
@@ -48,15 +50,15 @@
                 verifyCode: "",
                 errors: {},
                 btnTitle: "获取验证码",
-                disabled: false
+                disabled: true
             };
         },
         components: {
             InputGroup
         },
-        computed:{
-            isClick(){
-                if(!this.phone|| !this.verifyCode) return true;
+        computed: {
+            isClick() {
+                if (!this.phone || !this.verifyCode) return true;
                 else return false
             }
         },
@@ -125,30 +127,40 @@
             },
 
             //登录
-            handleLogin(){
+            handleLogin() {
                 //取消错误提醒
-                this.erros={}
+                this.erros = {}
                 //发送请求
-                this.$axios.post("/api/posts/sms_back",{
-                    phone:this.phone,
-                    code:this.verifyCode
-                }).then((res)=>{
+                this.$axios.post("/api/posts/sms_back", {
+                    phone: this.phone,
+                    code: this.verifyCode
+                }).then((res) => {
                     console.log(res)
                     //设置登录状态 并跳转
                     //本地存储登录状态
-                    localStorage.setItem("ele_login",true)
+                    localStorage.setItem("ele_login", true)
                     this.$router.push('/')
-                }).catch((err)=>{
+                }).catch((err) => {
                     //返回错误信息
                     console.log(err)
-                    this.errors={
-                        code:err.response.data.msg
+                    this.errors = {
+                        code: err.response.data.msg
                     }
                 })
             }
+
+        },
+            //  只有输入手机号为11位的时候，才显示验证码
+            updated() {
+                this.$nextTick(() => {
+                    console.log(this.phone.length)
+                    if(this.phone.length==11&&this.btnTitle=='获取验证码'){
+                        this.disabled=false
+                    }else{
+                        this.disabled=true
+                    }
+                })
             }
-
-
     }
 </script>
 
