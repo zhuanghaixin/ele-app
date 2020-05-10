@@ -3,7 +3,7 @@
         <div class="logo">
             <img src="../assets/logo.jpg" alt="my login image">
         </div>
-<!--        手机号-->
+        <!--        手机号-->
         <InputGroup
                 type="number"
                 v-model="phone"
@@ -14,11 +14,11 @@
                 @btnClick="getVerifyCode"
         >
         </InputGroup>
-<!--        验证码-->
+        <!--        验证码-->
         <InputGroup
                 type="number"
                 v-model="verifyCode"
-                placeholder="验证码"
+                placeholder="验证码  880265  查看控制台获取验证码"
                 :error="errors.code"
         >
         </InputGroup>
@@ -31,7 +31,7 @@
         </div>
         <!-- 登录按钮 -->
         <div class="login-btn">
-            <button>登录</button>
+            <button :disabled="isClick" @click="handleLogin">登录</button>
         </div>
     </div>
 
@@ -39,9 +39,10 @@
 
 <script>
     import InputGroup from "../components/InputGroup.vue"
+
     export default {
         name: "Login",
-        data(){
+        data() {
             return {
                 phone: "",
                 verifyCode: "",
@@ -50,37 +51,57 @@
                 disabled: false
             };
         },
-        components:{
+        components: {
             InputGroup
         },
-        methods:{
+        computed:{
+            isClick(){
+                if(!this.phone|| !this.verifyCode) return true;
+                else return false
+            }
+        },
+        methods: {
             //获取验证码
-            getVerifyCode(){
+            getVerifyCode() {
                 //判断当前手机号是否合法
 
-                if(this.validatePhone()){
+                if (this.validatePhone()) {
                     //发送网路请求
+                    this.$axios.post('/api/posts/sms_send ', {
+                        sid: "47d90dd42c88ca2612b75401e33450e7",
+                        token: "5eeeac16318a8b8c04f58b313b559a56",
+                        appid: "3522ff0b53bf4ca084e06b90fc738b2a",
+                        templateid: "543096",
+                        phone: this.phone
+                    }).then((res) => {
+                        console.log(111111)
+                        console.log(res)
+                        console.log(222222)
+                        this.validateBtn()
+                        console.log(333333)
+                    }).catch((err) => {
+                        console.log(err)
+                    })
 
-                    this.validateBtn()
 
                 }
             },
             // 验证手机号是否合法
-            validatePhone(){
-                if(!this.phone){
+            validatePhone() {
+                if (!this.phone) {
                     console.log(11233)
                     console.log(this.phone)
-                    this.errors={
-                        phone:'手机号码不能为空'
+                    this.errors = {
+                        phone: '手机号码不能为空'
                     }
                     return false;
-                }else if(!/^1[345678]\d{9}$/.test(this.phone)){
+                } else if (!/^1[345678]\d{9}$/.test(this.phone)) {
                     console.log(this.phone)
                     this.errors = {
                         phone: "请填写正确的手机号码"
                     };
                     return false;
-                }else{
+                } else {
                     this.errors = {}
                     return true
                 }
@@ -101,11 +122,31 @@
                         time--
                     }
                 }, 1000)
+            },
+
+            //登录
+            handleLogin(){
+                //取消错误提醒
+                this.erros={}
+                //发送请求
+                this.$axios.post("/api/posts/sms_back",{
+                    phone:this.phone,
+                    code:this.verifyCode
+                }).then((res)=>{
+                    console.log(res)
+                    //设置登录状态 并跳转
+                    //本地存储登录状态
+                    localStorage.setItem("ele_login",true)
+                    this.$router.push({name:'index'})
+                }).catch((err)=>{
+                    //返回错误信息
+                    console.log(err)
+                    this.errors={
+                        code:err.response.data.msg
+                    }
+                })
             }
-        }
-
-
-
+            }
 
 
     }
@@ -125,8 +166,9 @@
     .logo {
         text-align: center;
     }
-    .logo img{
-        width:150px;
+
+    .logo img {
+        width: 150px;
     }
 
     .text-group,
@@ -134,13 +176,16 @@
     .login-btn {
         margin-top: 20px;
     }
+
     .login-des {
         color: #aaa;
         line-height: 22px;
     }
+
     .login-des span {
         color: #4d90fe;
     }
+
     .login-btn button {
         width: 100%;
         height: 40px;
@@ -151,6 +196,7 @@
         border: none;
         outline: none;
     }
+
     .login-btn button[disabled] {
         background-color: #8bda81;
     }
