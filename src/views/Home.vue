@@ -1,7 +1,7 @@
 <template>
 <div class="home">
    <div class="header">
-       <div class="address-map">
+       <div class="address-map" @click="$router.push('/address')">
            <i class="fa fa-map-marker"></i>
            <span>{{address}}</span>
            <i class="fa fa-sort-desc"></i>
