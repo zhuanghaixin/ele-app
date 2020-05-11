@@ -11,7 +11,11 @@
     },
     methods:{
       getLocation(){
+        const self=this
+        console.log(self)
         AMap.plugin('AMap.Geolocation', function() {
+
+
           var geolocation = new AMap.Geolocation({
             // 是否使用高精度定位，默认：true
             enableHighAccuracy: true,
@@ -33,12 +37,58 @@
             // data是具体的定位信息
             //精准定位
             console.log(data)
+            self.$store.dispatch("setLocation",data)
+            self.$store.dispatch("setAddress",data.formattedAddress)
+
           }
 
           function onError (data) {
             // 定位出错
+            //非精准定位
             console.log(data)
+            self.getLngLocation()
           }
+        })
+      },
+      getLngLocation(){
+        const self=this
+        AMap.plugin('AMap.CitySearch', function () {
+          var citySearch = new AMap.CitySearch()
+          citySearch.getLocalCity(function (status, result) {
+            if (status === 'complete' && result.info === 'OK') {
+              // 查询成功，result即为当前所在城市信息
+              console.log(result)
+              AMap.plugin('AMap.Geocoder', function() {
+                var geocoder = new AMap.Geocoder({
+                  // city 指定进行编码查询的城市，支持传入城市名、adcode 和 citycode
+                  //修改过的city
+                  city: result.adcode
+                })
+                //修改过的lnglat
+                var lnglat = result.rectangle.split(';')[0].split(',')
+
+                //修改过result=>data
+                geocoder.getAddress(lnglat, function(status, data) {
+                  if (status === 'complete' && result.info === 'OK') {
+                    // result为对应的地理位置详细信息
+                    console.log(data)
+                    self.$store.dispatch("setLocation", {
+                      addressComponent: {
+                        city: result.city,
+                        province: result.province
+                      },
+                      formattedAddress: data.regeocode.formattedAddress
+                    });
+
+                    self.$store.dispatch(
+                            "setAddress",
+                            data.regeocode.formattedAddress
+                    )
+                  }
+                })
+              })
+            }
+          })
         })
       }
 
