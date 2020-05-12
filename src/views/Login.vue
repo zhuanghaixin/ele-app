@@ -161,6 +161,16 @@
                     }
                 })
             }
+        // watch:{
+        //     phone(){
+        //         console.log(this.phone.length)
+        //         if(this.phone.length==11&&this.btnTitle=='获取验证码'){
+        //             this.disabled=false
+        //         }else{
+        //             this.disabled=true
+        //         }
+        //     }
+        // }
     }
 </script>
 

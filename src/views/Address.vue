@@ -14,6 +14,14 @@
             </div>
             <Location :address="address"></Location>
         </div>
+        <div class="area">
+            <ul class="area-list" v-for="(item,index) in areaList" :key="index">
+                <li>
+                    <h4>{{item.name}}</h4>
+                    <p>{{item.district}}{{item.address}}</p>
+                </li>
+            </ul>
+        </div>
     </div>
 </template>
 
@@ -30,21 +38,46 @@
         data() {
             return {
                 city: "深圳市", //当前城市
-                search_val: ""
+                search_val: "",
+                areaList:'' //搜索的地区列表
             }
         },
         computed:{
             address(){
                 return this.$store.getters.location.formattedAddress
             }
-        }
-        ,
+        },
+        watch:{
+            search_val(){
+                this.searchPlace()
+            }
+        },
         beforeRouteEnter(to,from,next){
             console.log('to Address')
             console.log(to)
             next(vm=>{
                 vm.city=to.params.city
             })
+        },
+        methods:{
+            searchPlace(){
+                console.log(this.search_val)
+                const self=this
+
+                AMap.plugin('AMap.Autocomplete', function(){
+                    // 实例化Autocomplete
+                    var autoOptions = {
+                        //city 限定城市，默认全国
+                        city:self.city
+                    }
+                    var autoComplete= new AMap.Autocomplete(autoOptions);
+                    autoComplete.search(self.search_val, function(status, result) {
+                        // 搜索成功时，result即是对应的匹配数据
+                        console.log(result)
+                        self.areaList=result.tips
+                    })
+                })
+            }
         }
     }
 </script>
