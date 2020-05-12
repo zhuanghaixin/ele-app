@@ -16,7 +16,7 @@
         </div>
         <div class="area">
             <ul class="area-list" v-for="(item,index) in areaList" :key="index">
-                <li>
+                <li @click="selectAddress(item)">
                     <h4>{{item.name}}</h4>
                     <p>{{item.district}}{{item.address}}</p>
                 </li>
@@ -60,6 +60,7 @@
             })
         },
         methods:{
+            //搜索栏 搜索
             searchPlace(){
                 console.log(this.search_val)
                 const self=this
@@ -77,6 +78,14 @@
                         self.areaList=result.tips
                     })
                 })
+            },
+            //列表 选择地址
+            selectAddress(item){
+                //设置地址
+                this.$store.dispatch('setAddress',item.district+item.address+item.name)
+                //跳转
+                this.$router.push('/home')
+
             }
         }
     }
