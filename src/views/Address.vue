@@ -3,14 +3,14 @@
         <Header title="选择收获地址" :isLeft="true"></Header>
         <div class="city-search">
             <div class="search">
-                <span class="city">
-                    {{city}}
+                <div class="city" >
+                    <span @click="$router.push('/city')">{{city}}</span>
                     <i class="fa fa-angle-down"></i>
                    <div class="fa fa-search">
                        <input type="text" v-model="search_val" placeholder="小区/写字楼/学习等">
                    </div>
 
-                </span>
+                </div>
             </div>
             <Location :address="address"></Location>
         </div>
