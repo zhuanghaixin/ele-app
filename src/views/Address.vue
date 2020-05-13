@@ -53,7 +53,7 @@
             }
         },
         beforeRouteEnter(to,from,next){
-            console.log('to Address')
+            console.log(to.params.city+"传给来")
             console.log(to)
             next(vm=>{
                 vm.city=to.params.city

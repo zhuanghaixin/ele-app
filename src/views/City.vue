@@ -12,6 +12,7 @@
                 <Location :address="city"></Location>
             </div>
             <Alphabet
+                    @selectCity="selectCity"
                     :cityInfo="cityInfo"
                     :keys="keys"
                     ref="allcity"
@@ -63,12 +64,18 @@
                     this.keys.sort()
                     console.log(this.keys)
                     //获取到Alphabet中到DOM对象
-                    this.$nextTick(()=>{
-                        this.$refs.allcity.initScroll()
-                    })
+                    // this.$nextTick(()=>{
+                    //     this.$refs.allcity.initScroll()
+                    // })
                 }).catch((err) => {
                     console.log(err)
                 })
+            },
+
+            //选择城市
+            selectCity(city){
+                console.log(city)
+                this.$router.push({name:'Address',params:{city:city.name}})
             }
         }
     }
