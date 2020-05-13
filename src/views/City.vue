@@ -1,18 +1,23 @@
 <template>
     <div class="city">
         <div class="search-wrap">
-            <div class="search"><i class="fa fa-search"></i>
+            <div class="search">
+                <i class="fa fa-search"></i>
                 <input type="text" placeholder="输入城市名" v-model="city_val">
             </div>
-
             <button @click="$router.go(-1)">取消</button>
         </div>
-        <div>
+        <div style="height:100%">
             <div class="location">
                 <Location :address="city"></Location>
             </div>
-            <Alphabet :cityInfo="cityInfo" :keys="keys"></Alphabet>
+            <Alphabet
+                    :cityInfo="cityInfo"
+                    :keys="keys"
+                    ref="allcity"
+            ></Alphabet>
         </div>
+
     </div>
 </template>
 
@@ -29,38 +34,42 @@
         data() {
             return {
                 city_val: '',
-                cityInfo:{},//存城市的信息
-                keys:[]  //存到城市列表的字母
+                cityInfo: {},//存城市的信息
+                keys: []  //存到城市列表的字母
             }
         },
-        computed:{
-            city(){
+        computed: {
+            city() {
                 return this.$store.getters.location.addressComponent.city ||
                     this.$store.getters.location.addressComponent.province
             }
         },
-        created(){
+        created() {
             this.getCityInfo()
         },
-        methods:{
-           getCityInfo(){
-               this.$axios("/api/posts/cities").then((res)=>{
-                   console.log(res.data)
-                   this.cityInfo=res.data
-                   //处理key，计算key
-                   console.log('typeof this.cityInfo')
-                   console.log(typeof this.cityInfo)
-                   this.keys=Object.keys(res.data)
-                   console.log(this.keys)
-                   //hotCities这个key移除掉
-                   this.keys.pop()
-                   //keys排序
-                   this.keys.sort()
-                   console.log(this.keys)
-               }).catch((err)=>{
-                   console.log(err)
-               })
-           }
+        methods: {
+            getCityInfo() {
+                this.$axios("/api/posts/cities").then((res) => {
+                    console.log(res.data)
+                    this.cityInfo = res.data
+                    //处理key，计算key
+                    console.log('typeof this.cityInfo')
+                    console.log(typeof this.cityInfo)
+                    this.keys = Object.keys(res.data)
+                    console.log(this.keys)
+                    //hotCities这个key移除掉
+                    this.keys.pop()
+                    //keys排序
+                    this.keys.sort()
+                    console.log(this.keys)
+                    //获取到Alphabet中到DOM对象
+                    this.$nextTick(()=>{
+                        this.$refs.allcity.initScroll()
+                    })
+                }).catch((err) => {
+                    console.log(err)
+                })
+            }
         }
     }
 </script>
@@ -121,6 +130,7 @@
         background: #fff;
         padding: 5px 16px;
     }
+
     .search-list li {
         padding: 10px;
         border-bottom: 1px solid #eee;

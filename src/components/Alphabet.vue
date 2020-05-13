@@ -1,5 +1,5 @@
 <template>
-    <div class="alphabet">
+    <div class="alphabet" ref="area_scroll">
         <div class="scroll-wrap">
 <!--            热门城市-->
             <div class="hot-wrap">
@@ -26,18 +26,40 @@
 </template>
 
 <script>
+    import BScroll from 'better-scroll'
     export default {
         name: "Alphabet",
         props:{
             cityInfo:{
                 type:Object,
-                default:{}
+                default:{},
+
             },
             keys:{
                 type:Array,
                 default:[]
             }
+        },
+        dataO(){
+            return {
+                scroll:null
+            }
+        },
+        methods:{
+            initScroll(){
+
+                this.$nextTick(() => {
+                    this.scroll=new BScroll(this.$refs.area_scroll,{
+                        click:true,
+
+                    })
+                })
+            }
+        },
+        mounted(){
+            this.initScroll()
         }
+
     }
 </script>
 
