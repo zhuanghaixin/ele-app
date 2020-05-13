@@ -105,6 +105,9 @@
     .search-wrap button {
         outline: none;
         color: #009eef;
+        margin: 0;
+        padding: 0;
+        border: 1px solid transparent; /*自定义边框*/
     }
 
     .location {
