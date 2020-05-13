@@ -11,21 +11,26 @@
             <div class="location">
                 <Location :address="city"></Location>
             </div>
+            <Alphabet :cityInfo="cityInfo" :keys="keys"></Alphabet>
         </div>
     </div>
 </template>
 
 <script>
     import Location from '../components/Location.vue'
+    import Alphabet from '../components/Alphabet.vue'
 
     export default {
         name: "City",
         components: {
-            Location
+            Location,
+            Alphabet
         },
         data() {
             return {
-                city_val: ''
+                city_val: '',
+                cityInfo:{},//存城市的信息
+                keys:[]  //存到城市列表的字母
             }
         },
         computed:{
@@ -34,6 +39,29 @@
                     this.$store.getters.location.addressComponent.province
             }
         },
+        created(){
+            this.getCityInfo()
+        },
+        methods:{
+           getCityInfo(){
+               this.$axios("/api/posts/cities").then((res)=>{
+                   console.log(res.data)
+                   this.cityInfo=res.data
+                   //处理key，计算key
+                   console.log('typeof this.cityInfo')
+                   console.log(typeof this.cityInfo)
+                   this.keys=Object.keys(res.data)
+                   console.log(this.keys)
+                   //hotCities这个key移除掉
+                   this.keys.pop()
+                   //keys排序
+                   this.keys.sort()
+                   console.log(this.keys)
+               }).catch((err)=>{
+                   console.log(err)
+               })
+           }
+        }
     }
 </script>
 
