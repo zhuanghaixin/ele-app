@@ -5,11 +5,11 @@
                 <i class="fa fa-search"></i>
                 <input type="text" placeholder="输入城市名" v-model="city_val">
             </div>
-            <button @click="$router.go(-1)">取消</button>
+            <button @click="$router.push({name:'Address',params:{city:city}})">取消</button>
         </div>
         <div style="height:100%" v-if="searchList.length==0">
             <div class="location">
-                <Location :address="city"></Location>
+                <Location :address="city" @click="selectCity({name:city})"></Location>
             </div>
             <Alphabet
                     @selectCity="selectCity"

@@ -12,7 +12,7 @@
 
                 </div>
             </div>
-            <Location :address="address"></Location>
+            <Location :address="address" @click="selectAddress"></Location>
         </div>
         <div class="area">
             <ul class="area-list" v-for="(item,index) in areaList" :key="index">
@@ -81,10 +81,16 @@
             },
             //列表 选择地址
             selectAddress(item){
-                //设置地址
-                this.$store.dispatch('setAddress',item.district+item.address+item.name)
-                //跳转
-                this.$router.push('/home')
+                if(item){
+                    //设置地址
+                    this.$store.dispatch('setAddress',item.district+item.address+item.name)
+                    //跳转
+                    this.$router.push('/home')
+                }else{
+                    this.$store.dispatch('setAddress',this.address)
+                    this.$router.push('/home')
+                }
+
 
             }
         }
