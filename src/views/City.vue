@@ -7,7 +7,7 @@
             </div>
             <button @click="$router.go(-1)">取消</button>
         </div>
-        <div style="height:100%">
+        <div style="height:100%" v-if="searchList.length==0">
             <div class="location">
                 <Location :address="city"></Location>
             </div>
@@ -17,6 +17,13 @@
                     :keys="keys"
                     ref="allcity"
             ></Alphabet>
+        </div>
+        <div class="search-list" v-else>
+            <ul>
+                <li v-for="(item,index) in searchList" :key="index" @click="selectCity(item)">
+                    {{item.name}}
+                </li>
+            </ul>
         </div>
 
     </div>
@@ -36,7 +43,9 @@
             return {
                 city_val: '',
                 cityInfo: {},//存城市的信息
-                keys: []  //存到城市列表的字母
+                keys: [],  //存到城市列表的字母
+                allCities:[],  //鞍山,安庆
+                searchList:[]  //上海 上绕
             }
         },
         computed: {
@@ -47,6 +56,12 @@
         },
         created() {
             this.getCityInfo()
+        },
+        watch:{
+            city_val(){
+                console.log(this.city_val)
+                this.searchCity()
+            }
         },
         methods: {
             getCityInfo() {
@@ -67,6 +82,18 @@
                     // this.$nextTick(()=>{
                     //     this.$refs.allcity.initScroll()
                     // })
+                    //存储所有城市，用来搜索过滤
+                    this.keys.forEach(key=>{
+                        console.log(key)
+                        //遍历cityInfo
+                        this.cityInfo[key].forEach(city=>{
+                            console.log(city)  //安庆，鞍山，澳门... ｜北京，包头...
+                            //将所有城市存到 allCities
+                            this.allCities.push(city)
+                        })
+                    })
+                    console.log('this.allCities')
+                    console.log(this.allCities)
                 }).catch((err) => {
                     console.log(err)
                 })
@@ -76,6 +103,20 @@
             selectCity(city){
                 console.log(city)
                 this.$router.push({name:'Address',params:{city:city.name}})
+            },
+            //搜索城市
+            searchCity(){
+                if(!this.city_val){
+                    //如果搜索框为空，数组置为空
+                    this.searchList=[]
+                }else{
+                    //根据输入框的关键字检索城市，并存入到searchList数组中
+                    this.searchList=this.allCities.filter((item)=>{
+                        return item.name.indexOf(this.city_val)!=-1
+                    })
+                }
+                console.log('this.searchList')
+                console.log(this.searchList)
             }
         }
     }
@@ -123,6 +164,7 @@
         color: #009eef;
         margin: 0;
         padding: 0;
+        background:#fff;
         border: 1px solid transparent; /*自定义边框*/
     }
 
