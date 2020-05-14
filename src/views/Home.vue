@@ -6,11 +6,17 @@
            <span>{{address}}</span>
            <i class="fa fa-sort-desc"></i>
        </div>
-       <div class="shop-search">
-           <i class="fa fa-search"></i>
-           搜索商家 商家名称
-       </div>
+
    </div>
+    <div class="search-wrap">
+        <div class="shop-search">
+            <i class="fa fa-search"></i>
+            搜索商家 商家名称
+        </div>
+    </div>
+    <div id="container" style="height:2000px">
+
+    </div>
 </div>
 </template>
 
@@ -37,9 +43,9 @@
         overflow: auto;
         box-sizing: border-box;
     }
-    .header {
+    .header,.search-wrap{
         background-color: #009eef;
-        padding: 16px;
+        padding: 10px 16px;
     }
     .header .address-map {
         color: #fff;
@@ -56,13 +62,19 @@
         white-space: nowrap;
         text-overflow: ellipsis;
     }
-    .header .shop-search {
-        margin-top: 10px;
+    .search-wrap .shop-search {
+        /*margin-top: 10px;*/
         background-color: #fff;
         padding: 10px 0;
         border-radius: 4px;
         text-align: center;
         color: #aaa;
+    }
+    .search-wrap {
+        position: sticky;
+        top: 0px;
+        z-index: 999;
+        box-sizing: border-box;
     }
 </style>
 
