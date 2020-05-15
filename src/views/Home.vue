@@ -35,21 +35,27 @@
     </div>
 <!--    推荐商家-->
     <div class="shoplist-title">推荐商家</div>
+<!--    导航-->
+<FilterView :filterData="filterData"></FilterView>
+
 </div>
 </template>
 
 <script>
     import {Swipe,SwipeItem} from 'mint-ui'
+    import FilterView from '../components/FilterView.vue'
     export default {
         name: "Home",
         components:{
             [Swipe.name]: Swipe,
-            [SwipeItem.name]: SwipeItem
+            [SwipeItem.name]: SwipeItem,
+            FilterView
         },
         data(){
             return{
                 swipeImgs:[],
-                entries:[]
+                entries:[],
+                filterData:null
             }
         },
         computed:{
@@ -67,11 +73,18 @@
         },
         methods:{
             getData(){
+
                 this.$axios("/api/profile/shopping").then(res=>{
                     console.log(res.data)
                     this.swipeImgs=res.data.swipeImgs
                     this.entries=res.data.entries
                     console.log(this.entries)
+                })
+                this.$axios('/api/profile/filter').then(res=>{
+                    console.log(res.data)
+                    this.filterData=res.data
+
+
                 })
 
             }
