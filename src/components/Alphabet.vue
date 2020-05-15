@@ -80,8 +80,8 @@
                 // 根据下标,滚动到相对应的元素上
 
                 let el = citylist[index]
-                console.log('el')
-                console.log(el)
+                // console.log('el')
+                // console.log(el)
 
                 this.scroll.scrollToElement(el,250)
             }

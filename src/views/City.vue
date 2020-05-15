@@ -69,10 +69,10 @@
                     console.log(res.data)
                     this.cityInfo = res.data
                     //处理key，计算key
-                    console.log('typeof this.cityInfo')
-                    console.log(typeof this.cityInfo)
+                    // console.log('typeof this.cityInfo')
+                    // console.log(typeof this.cityInfo)
                     this.keys = Object.keys(res.data)
-                    console.log(this.keys)
+                    // console.log(this.keys)
                     //hotCities这个key移除掉
                     this.keys.pop()
                     //keys排序
@@ -84,16 +84,16 @@
                     // })
                     //存储所有城市，用来搜索过滤
                     this.keys.forEach(key=>{
-                        console.log(key)
+                        // console.log(key)
                         //遍历cityInfo
                         this.cityInfo[key].forEach(city=>{
-                            console.log(city)  //安庆，鞍山，澳门... ｜北京，包头...
+                            // console.log(city)  //安庆，鞍山，澳门... ｜北京，包头...
                             //将所有城市存到 allCities
                             this.allCities.push(city)
                         })
                     })
-                    console.log('this.allCities')
-                    console.log(this.allCities)
+                    // console.log('this.allCities')
+                    // console.log(this.allCities)
                 }).catch((err) => {
                     console.log(err)
                 })
@@ -101,7 +101,7 @@
 
             //选择城市
             selectCity(city){
-                console.log(city)
+                // console.log(city)
                 this.$router.push({name:'Address',params:{city:city.name}})
             },
             //搜索城市
@@ -115,8 +115,8 @@
                         return item.name.indexOf(this.city_val)!=-1
                     })
                 }
-                console.log('this.searchList')
-                console.log(this.searchList)
+                // console.log('this.searchList')
+                // console.log(this.searchList)
             }
         }
     }

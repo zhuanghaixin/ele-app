@@ -14,15 +14,44 @@
             搜索商家 商家名称
         </div>
     </div>
-    <div id="container" style="height:2000px">
-
+    <div id="container">
+<!--        轮播-->
+        <mt-swipe :auto="4000" class="swiper">
+            <mt-swipe-item v-for="(img,index) in swipeImgs" :key="index">
+                <img :src="img" alt="">
+            </mt-swipe-item>
+        </mt-swipe>
+<!--        分类-->
+        <mt-swipe :auto="0" class="entries">
+            <mt-swipe-item v-for="(entry,i) in entries" :key="i" class="entry-wrap">
+                <div class="foodentry" v-for="(item,index) in entry" :key="index">
+                    <div class="img-wrap">
+                        <img :src="item.image" alt="">
+                    </div>
+                    <span>{{item.name}}</span>
+                </div>
+            </mt-swipe-item>
+        </mt-swipe>
     </div>
+<!--    推荐商家-->
+    <div class="shoplist-title">推荐商家</div>
 </div>
 </template>
 
 <script>
+    import {Swipe,SwipeItem} from 'mint-ui'
     export default {
         name: "Home",
+        components:{
+            [Swipe.name]: Swipe,
+            [SwipeItem.name]: SwipeItem
+        },
+        data(){
+            return{
+                swipeImgs:[],
+                entries:[]
+            }
+        },
         computed:{
             address(){
                 return this.$store.getters.address
@@ -32,6 +61,20 @@
                         this.$store.getters.location.addressComponent.province
             }
 
+        },
+        created(){
+            this.getData()
+        },
+        methods:{
+            getData(){
+                this.$axios("/api/profile/shopping").then(res=>{
+                    console.log(res.data)
+                    this.swipeImgs=res.data.swipeImgs
+                    this.entries=res.data.entries
+                    console.log(this.entries)
+                })
+
+            }
         }
     }
 </script>
@@ -75,6 +118,80 @@
         top: 0px;
         z-index: 999;
         box-sizing: border-box;
+    }
+
+    .swiper{
+        height: 100px;
+    }
+    .swiper img{
+        width: 100%;
+        height: 100%;
+    }
+
+/*    手动轮播*/
+
+    .entries {
+        background: #fff;
+        height: 47.2vw;
+        text-align: center;
+        overflow: hidden;
+    }
+    .foodentry {
+        width: 20%;
+        float: left;
+        position: relative;
+        margin-top: 2.933333vw;
+    }
+    .foodentry .img-wrap {
+        position: relative;
+        display: inline-block;
+        width: 12vw;
+        height: 12vw;
+    }
+    .img-wrap img {
+        width: 100%;
+        height: 100%;
+    }
+    .foodentry span {
+        display: block;
+        color: #666;
+        font-size: 0.32rem;
+    }
+    /* 推荐商家 */
+    .shoplist-title {
+        display: flex;
+        justify-content: center;
+        height: 9.6vw;
+        line-height: 9.6vw;
+        font-size: 16px;
+        color: #333;
+        background: #fff;
+    }
+    .shoplist-title:after,
+    .shoplist-title:before {
+        display: block;
+        content: "一";
+        width: 5.333333vw;
+        height: 0.266667vw;
+        color: #999;
+    }
+    .shoplist-title:before {
+        margin-right: 3.466667vw;
+    }
+    .shoplist-title:after {
+        margin-left: 3.466667vw;
+    }
+
+    .fixedview {
+        width: 100%;
+        position: fixed;
+        top: 0px;
+        z-index: 999;
+    }
+
+    .mint-loadmore {
+        height: calc(100% - 95px);
+        overflow: auto;
     }
 </style>
 

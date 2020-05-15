@@ -76,11 +76,11 @@
                         templateid: "543096",
                         phone: this.phone
                     }).then((res) => {
-                        console.log(111111)
-                        console.log(res)
+                        // console.log(111111)
+                        // console.log(res)
                         console.log(222222)
                         this.validateBtn()
-                        console.log(333333)
+                        // console.log(333333)
                     }).catch((err) => {
                         console.log(err)
                     })
@@ -91,14 +91,14 @@
             // 验证手机号是否合法
             validatePhone() {
                 if (!this.phone) {
-                    console.log(11233)
-                    console.log(this.phone)
+                    // console.log(11233)
+                    // console.log(this.phone)
                     this.errors = {
                         phone: '手机号码不能为空'
                     }
                     return false;
                 } else if (!/^1[345678]\d{9}$/.test(this.phone)) {
-                    console.log(this.phone)
+                    // console.log(this.phone)
                     this.errors = {
                         phone: "请填写正确的手机号码"
                     };
@@ -153,7 +153,7 @@
             //  只有输入手机号为11位的时候，才显示验证码
             updated() {
                 this.$nextTick(() => {
-                    console.log(this.phone.length)
+                    // console.log(this.phone.length)
                     if(this.phone.length==11&&this.btnTitle=='获取验证码'){
                         this.disabled=false
                     }else{
