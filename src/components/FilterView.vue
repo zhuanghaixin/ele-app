@@ -41,7 +41,12 @@
                 >
                     <p>{{screen.title}}</p>
                     <ul>
-                        <li v-for="(item,i) in screen.data" :key="i">
+                        <li
+                                v-for="(item,i) in screen.data"
+                                :key="i"
+                                :class="{'selected':item.select}"
+                                @click="selectScreen(item,screen)"
+                        >
                             <img v-if="item.icon"
                                  :src="item.icon" alt="">
                             <span>{{item.name}}</span>
@@ -51,8 +56,15 @@
                 </div>
             </div>
             <div class="morefilter-btn">
-                <span class="morefilter-clear">清空</span>
-                <span class="morefilter-ok">确定</span>
+                <span
+                        class="morefilter-clear"
+                        :class="{'edit':edit}"
+                        @click="clearFilter"
+                >清空</span>
+                <span
+                        class="morefilter-ok"
+                        @click="filterOk"
+                >确定</span>
             </div>
         </section>
     </div>
@@ -73,6 +85,20 @@
                 currentSort: 0,           //当前排序方式2
                 isFilter: false,    //显示蒙版，筛选
             }
+        },
+        computed:{
+            //当选中配送方式 清空按钮高亮
+           edit(){
+               let edit=false
+               this.filterData.screenBy.forEach(screen=>{
+                   screen.data.forEach(item=>{
+                       if(item.select){
+                           edit=true
+                       }
+                   })
+               })
+               return edit
+           }
         },
         methods: {
             filterSort(index) {
@@ -121,6 +147,54 @@
                 //更新数据
                 this.$emit('updateData', {condition: item.code})
 
+            },
+
+            //筛选配送方式
+            selectScreen(item,screen){
+                if(screen.id!=='MPI'){
+                    //单选 让单选里面的所有元素都是未选状态
+                    screen.data.forEach(ele=>{
+                        ele.select=false
+                    })
+                }
+                item.select=!item.select
+            },
+            //清空选中的配送方式
+            clearFilter(){
+                this.filterData.screenBy.forEach(screen=>{
+                    screen.data.forEach(item=>{
+                        item.select=false
+                    })
+                })
+            },
+            //点击确定按钮  更新数据
+            filterOk(){
+                let screenData={
+                    MPI:"",
+                    offer:"",
+                    per:""
+                }
+                let mpiStr="";
+                this.filterData.screenBy.forEach(screen=>{
+                    screen.data.forEach((item,index)=>{
+                        if(item.select){
+                            //两种清空  1.多选 2，单选
+                            if(screen.id!=='MPI'){
+                                //单选
+                                screenData[screen.id]=item.code
+                            }else{
+                                console.log('item.code')
+                                console.log(item.code)
+                                //多选 fengniao,pinpai
+                                mpiStr+=item.code+","
+                                screenData[screen.id]=mpiStr
+                            }
+                        }
+                    })
+                })
+                console.log(mpiStr)
+                this.$emit('updateData', {condition: screenData})
+                this.hideView()
             }
 
         }
@@ -287,11 +361,13 @@
         border: 0.133333vw solid #00d762;
     }
 
+    /*选中状态 */
     .selected {
         color: #3190e8 !important;
         background-color: #edf5ff !important;
     }
 
+    /*当选中之后，清空按钮颜色加深*/
     .edit {
         color: #333 !important;
     }
