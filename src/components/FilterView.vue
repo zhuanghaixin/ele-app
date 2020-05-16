@@ -1,13 +1,22 @@
 <template>
-    <div v-if="filterData" class="filter-wrap">
-        <aside
-                class="filter"
-        >
-        <div class="filter-nav" v-for="(item,index) in filterData.navTab" :key="index">
-            <span>{{item.name}}</span>
-            <i v-if="item.icon" :class="'fa fa-'+item.icon"></i>
+    <div :class="{'open':isSort}" @click.self="hideView">
+        <div v-if="filterData" class="filter-wrap">
+            <aside
+                    class="filter"
+            >
+                <div
+                        class="filter-nav"
+                        v-for="(item,index) in filterData.navTab"
+                        :key="index"
+                        :class="{'filter-bold':currentFilter==index}"
+                        @click="filterSort(index)"
+
+                >
+                    <span>{{item.name}}</span>
+                    <i v-if="item.icon" :class="'fa fa-'+item.icon"></i>
+                </div>
+            </aside>
         </div>
-        </aside>
     </div>
 </template>
 
@@ -19,6 +28,35 @@
                 type:Object
             }
         },
+        data(){
+            return{
+                currentFilter:0, // 更改下标
+                isSort:false  //显示蒙版， 综合排序
+            }
+        },
+        methods:{
+            filterSort(index){
+                this.currentFilter=index
+                switch(index){
+                    case 0:
+                    case 3:
+                        this.isSort=true;
+                        //向Home.vue触发事件
+                        this.$emit("searchFixed",this.isSort)
+                        console.log(123)
+                    break;
+                    default:
+                        this.hideView()
+                        break;
+                }
+            },
+        //    隐藏蒙版
+            hideView(){
+                this.isSort=false
+                this.$emit("searchFixed",this.isSort)
+            }
+
+        }
 
     }
 </script>
@@ -54,11 +92,14 @@
         will-change: transform;
     }
 
+    /*字体加粗*/
+
     .filter-bold {
         font-weight: 600;
         color: #333;
     }
 
+    /*显示蒙版*/
     .open {
         position: fixed;
         top: 0;

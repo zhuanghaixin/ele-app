@@ -1,5 +1,6 @@
 <template>
 <div class="home">
+<!--    头部-->
    <div class="header">
        <div class="address-map" @click="$router.push({name:'Address',params:{city:city}})">
            <i class="fa fa-map-marker"></i>
@@ -8,7 +9,11 @@
        </div>
 
    </div>
-    <div class="search-wrap">
+<!--    搜索框-->
+    <div
+            class="search-wrap"
+            :class="{'fixedview':showFilter}"
+           >
         <div class="shop-search">
             <i class="fa fa-search"></i>
             搜索商家 商家名称
@@ -36,11 +41,13 @@
 <!--    推荐商家-->
     <div class="shoplist-title">推荐商家</div>
 <!--    导航-->
-<FilterView :filterData="filterData"></FilterView>
+<FilterView
+        :filterData="filterData"
+        @searchFixed="showFilterView"
+></FilterView>
 
 </div>
 </template>
-
 <script>
     import {Swipe,SwipeItem} from 'mint-ui'
     import FilterView from '../components/FilterView.vue'
@@ -55,7 +62,8 @@
             return{
                 swipeImgs:[],
                 entries:[],
-                filterData:null
+                filterData:null,
+                showFilter:false
             }
         },
         computed:{
@@ -72,6 +80,7 @@
             this.getData()
         },
         methods:{
+            //获取数据
             getData(){
 
                 this.$axios("/api/profile/shopping").then(res=>{
@@ -86,7 +95,12 @@
 
 
                 })
-
+            },
+            //让搜索框置顶
+            showFilterView(isShow){
+                console.log('isShow')
+                console.log(isShow)
+                this.showFilter=isShow
             }
         }
     }
@@ -99,6 +113,7 @@
         overflow: auto;
         box-sizing: border-box;
     }
+    /*头部*/
     .header,.search-wrap{
         background-color: #009eef;
         padding: 10px 16px;
@@ -118,6 +133,8 @@
         white-space: nowrap;
         text-overflow: ellipsis;
     }
+
+    /*搜索框*/
     .search-wrap .shop-search {
         /*margin-top: 10px;*/
         background-color: #fff;
@@ -195,6 +212,8 @@
         margin-left: 3.466667vw;
     }
 
+
+    /*当点击综合排序的时候，搜索框黏贴置顶*/
     .fixedview {
         width: 100%;
         position: fixed;
