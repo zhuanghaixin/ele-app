@@ -14,16 +14,10 @@
                 </div>
 <!--                第二行 星级-->
                 <div class="index-rateWrap">
-                    <div class="Rating-gray">
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                    </div>
-                    <span class="rate">{{restaurant.rating}}</span>
-                    <span>月售{{restaurant.recent_order_num}}单</span>
+                    <div>
+                        <Rating :rating="restaurant.rating"></Rating>
+                        <span class="rate">{{restaurant.rating}}</span>
+                        <span>月售{{restaurant.recent_order_num}}单</span></div>
                     <div v-if="restaurant.delivery_mode" class="delivery">
                         <span class="icon-hollow">{{restaurant.delivery_mode.text}}</span>
                     </div>
@@ -48,8 +42,12 @@
 </template>
 
 <script>
+    import Rating from './Rating.vue'
     export default {
         name: "IndexShop",
+        components:{
+            Rating
+        },
         props:{
             restaurant:{
                 type:Object
