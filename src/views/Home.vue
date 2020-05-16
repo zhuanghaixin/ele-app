@@ -44,6 +44,8 @@
 <FilterView
         :filterData="filterData"
         @searchFixed="showFilterView"
+        @updateData="updateData"
+
 ></FilterView>
 
 </div>
@@ -98,9 +100,11 @@
             },
             //让搜索框置顶
             showFilterView(isShow){
-                console.log('isShow')
-                console.log(isShow)
                 this.showFilter=isShow
+            },
+            //更新数据
+            updateData(condition){
+                console.log(condition)
             }
         }
     }
