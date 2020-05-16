@@ -1,5 +1,5 @@
 <template>
-    <div :class="{'open':isSort}" @click.self="hideView">
+    <div :class="{'open':isSort || isFilter }" @click.self="hideView">
         <!--        导航-->
         <div v-if="filterData" class="filter-wrap">
             <aside
@@ -31,6 +31,30 @@
                 </li>
             </ul>
         </section>
+        <!--        筛选-->
+        <section class="filter-extend" v-if="isFilter">
+            <div class="filter-sort">
+                <div class="morefilter"
+                     v-for="(screen,index) in filterData.screenBy"
+                     :key="index"
+
+                >
+                    <p>{{screen.title}}</p>
+                    <ul>
+                        <li v-for="(item,i) in screen.data" :key="i">
+                            <img v-if="item.icon"
+                                 :src="item.icon" alt="">
+                            <span>{{item.name}}</span>
+                        </li>
+                    </ul>
+
+                </div>
+            </div>
+            <div class="morefilter-btn">
+                <span class="morefilter-clear">清空</span>
+                <span class="morefilter-ok">确定</span>
+            </div>
+        </section>
     </div>
 </template>
 
@@ -46,7 +70,8 @@
             return {
                 currentFilter: 0, // 更改下标
                 isSort: false,  //显示蒙版， 综合排序
-                currentSort: 0             //当前排序方式2
+                currentSort: 0,           //当前排序方式2
+                isFilter: false,    //显示蒙版，筛选
             }
         },
         methods: {
@@ -68,6 +93,10 @@
                         this.hideView()
                         break;
                     case 3:
+                        this.isFilter = true
+                        //向Home.vue触发事件
+                        this.$emit("searchFixed", this.isFilter)
+                        break;
 
                     default:
                         this.hideView()
@@ -77,7 +106,9 @@
             // 隐藏蒙版
             hideView() {
                 this.isSort = false
+                this.isFilter = false
                 this.$emit("searchFixed", this.isSort)
+                this.$emit("searchFixed", this.isFilter)
             },
 
             // 选择排序方式
@@ -227,6 +258,7 @@
         vertical-align: middle;
     }
 
+    /*筛选按钮*/
     .morefilter-btn {
         display: flex;
         justify-content: space-around;
