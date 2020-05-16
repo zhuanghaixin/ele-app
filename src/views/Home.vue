@@ -47,25 +47,38 @@
         @updateData="updateData"
 
 ></FilterView>
+<!--    商家信息-->
+    <div class="shoplist">
+        <IndexShop
+                v-for="(item,index) in restaurants"
+                :key="index"
+                :restaurant="item.restaurant"
+        ></IndexShop>
+    </div>
 
 </div>
 </template>
 <script>
     import {Swipe,SwipeItem} from 'mint-ui'
     import FilterView from '../components/FilterView.vue'
+    import IndexShop from '../components/IndexShop.vue'
     export default {
         name: "Home",
         components:{
             [Swipe.name]: Swipe,
             [SwipeItem.name]: SwipeItem,
-            FilterView
+            FilterView,
+            IndexShop
         },
         data(){
             return{
                 swipeImgs:[],
                 entries:[],
                 filterData:null,
-                showFilter:false
+                showFilter:false, //显示蒙版
+                page:1,
+                size:5,
+                restaurants:[] //存放所有商家的容器
             }
         },
         computed:{
@@ -84,18 +97,28 @@
         methods:{
             //获取数据
             getData(){
-
+                //拉取轮播信息吗
                 this.$axios("/api/profile/shopping").then(res=>{
                     console.log(res.data)
                     this.swipeImgs=res.data.swipeImgs
                     this.entries=res.data.entries
                     console.log(this.entries)
+                }).catch((err) => {
+                    console.log(err)
                 })
+                //拉取排序的相关信息
                 this.$axios('/api/profile/filter').then(res=>{
                     console.log(res.data)
                     this.filterData=res.data
-
-
+                }).catch((err) => {
+                    console.log(err)
+                })
+                //拉取商家信息
+                this.$axios.post(`/api/profile/restaurants/1/5`).then(res=>{
+                    console.log(res.data)
+                    this.restaurants=res.data
+                }).catch((err) => {
+                    console.log(err)
                 })
             },
             //让搜索框置顶
