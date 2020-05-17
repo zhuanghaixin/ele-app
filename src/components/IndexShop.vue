@@ -87,7 +87,7 @@
         overflow: hidden;
         flex-direction: column;
         padding-left: 2.666667vw;
-        font-size: 0.2rem;
+        font-size: 1rem;
         flex-grow: 1;
     }
     .index-shopname {

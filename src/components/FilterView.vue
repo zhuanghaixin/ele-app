@@ -111,7 +111,7 @@
                         break;
                     case 1:
                         this.$emit('updateData', {condition: this.filterData.navTab[1].condition})
-                        this.hideView
+                        this.hideView()
                         break;
 
                     case 2:

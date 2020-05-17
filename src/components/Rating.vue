@@ -50,8 +50,8 @@
                     result.push(CLS_OFF)  //length++
 
                 }
-                console.log('result')
-                console.log(result)
+                // console.log('result')
+                // console.log(result)
                 return result
 
 

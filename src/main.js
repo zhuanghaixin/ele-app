@@ -9,9 +9,9 @@ import axios from 'axios'
 //图片懒加载
 // import VueLazyload from 'vue-lazyload'
 
-// import VConsole from 'vconsole'
-//
-// const vConsole = new VConsole();
+import VConsole from 'vconsole'
+
+const vConsole = new VConsole();
 
 Vue.prototype.$axios=axios
 Vue.config.productionTip = false

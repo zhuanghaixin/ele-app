@@ -48,21 +48,19 @@
 
 ></FilterView>
 
+
     <mt-loadmore
             :top-method="loadData"
             :bottom-method="loadMore"
             :bottom-all-loaded="allLoaded"
-            ref="loadmore">
-        <!--    商家信息-->
-        <div class="shoplist">
-            <IndexShop
-                    v-for="(item,index) in restaurants"
-                    :key="index"
-                    :restaurant="item.restaurant"
-                    :auto-fill="false"
-                    :bottomPullText="bottomPullText"
-            ></IndexShop>
-        </div>
+            :auto-fill="false"
+            :bottomPullText="bottomPullText"
+            ref="loadmore"
+    >
+            <div class="shoplist">
+                <IndexShop v-for="(item,index) in restaurants" :key="index" :restaurant="item.restaurant"/>
+
+            </div>
     </mt-loadmore>
 
 </div>
@@ -90,7 +88,8 @@
                 size:5,
                 restaurants:[], //存放所有商家的容器
                 allLoaded:false,
-                bottomPullText:'上拉加载更多'
+                bottomPullText:'上拉加载更多',
+                data:null,
             }
         },
         computed:{
@@ -125,10 +124,11 @@
                 }).catch((err) => {
                     console.log(err)
                 })
-                //拉取商家信息
-               this.loadData()
 
-                this.load
+                //拉取商家信息
+                this.loadData()
+
+
             },
             //让搜索框置顶
             showFilterView(isShow){
@@ -136,60 +136,50 @@
             },
             //更新数据
             updateData(condition){
+                console.log('condition')
                 console.log(condition)
-            },
-            loadData(){
-                // 加载更多数据
-                // this.$refs.loadmore.onTopLoaded();
-                this.page=1
-                this.allLoaded=false
-                this.bottomPullText="上拉加载更多"
+                this.data=condition
+                this.loadData()
 
+            },
+            loadData() {
+                this.page = 1;
+                this.allLoaded = false;
+                this.bottomPullText = "上拉加载更多";
                 // 拉取商家信息
-                this.$axios.post(`/api/profile/restaurants/${this.page}/${this.size}`).then(res=>{
-                    console.log(res.data)
-                    //上拉刷新
-                    this.$refs.loadmore.onTopLoaded();
-                    this.restaurants=res.data
-
-                }).catch((err) => {
-                    console.log(err)
-                })
+                this.$axios
+                    .post(`/api/profile/restaurants/${this.page}/${this.size}`, this.data)
+                    .then(res => {
+                        // console.log(res.data);
+                        this.$refs.loadmore.onTopLoaded();
+                        this.restaurants = res.data;
+                    });
             },
-            loadMore(){
-            // 加载更多数据
-                //this.allLoaded为false表示还没有全部加载完，!this.allLoaded为true
-                if(!this.allLoaded){
-                    this.page++
+            loadMore() {
+                if (!this.allLoaded) {
+                    this.page++;
                     // 拉取商家信息
-                    this.$axios.post(`/api/profile/restaurants/${this.page}/${this.size}`).then(res=>{
-                        console.log(res.data)
-                        //下拉加载数据
-                        this.$refs.loadmore.onBottomLoaded();
-                        // this.restaurants=res.data
-                        if(res.data.length>0){
-                            res.data.forEach(item=>{
-                                this.restaurants.push(item)
-                            })
-                            if(res.data<this.size){
-                                //数据为空
-                                this.allLoaded=true
-                                this.bottomPullText="没有更多了哦  "
+                    this.$axios
+                        .post(`/api/profile/restaurants/${this.page}/${this.size}`)
+                        .then(res => {
+                            //  加载完之后重新渲染
+                            this.$refs.loadmore.onBottomLoaded();
+                            if (res.data.length > 0) {
+                                res.data.forEach(item => {
+                                    this.restaurants.push(item);
+                                });
+                                if (res.data < this.size) {
+                                    this.allLoaded = true;
+                                    this.bottomPullText = "没有更多了哦";
+                                }
+                            } else {
+                                // 数据为空
+                                this.allLoaded = true;
+                                this.bottomPullText = "没有更多了哦";
                             }
-                        }else{
-                            //数据为空
-                            this.allLoaded=true
-                            this.bottomPullText="没有更多了哦  "
-                        }
-
-                    }).catch((err) => {
-                        console.log(err)
-                    })
+                        });
                 }
-
-
-
-            }
+            },
         }
     }
 </script>
@@ -200,6 +190,15 @@
         height: 100%;
         overflow: auto;
         box-sizing: border-box;
+    }
+    /* Hide scrollbar for Chrome, Safari and Opera */
+    .home::-webkit-scrollbar {
+        /*display: none;*/
+    }
+
+    /* Hide scrollbar for IE and Edge */
+    .home {
+        /*-ms-overflow-style: none;*/
     }
     /*头部*/
     .header,.search-wrap{
@@ -273,7 +272,7 @@
     .foodentry span {
         display: block;
         color: #666;
-        font-size: 0.32rem;
+        font-size: 1rem;
     }
     /* 推荐商家 */
     .shoplist-title {
