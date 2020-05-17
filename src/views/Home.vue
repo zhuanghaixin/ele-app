@@ -47,19 +47,28 @@
         @updateData="updateData"
 
 ></FilterView>
-<!--    商家信息-->
-    <div class="shoplist">
-        <IndexShop
-                v-for="(item,index) in restaurants"
-                :key="index"
-                :restaurant="item.restaurant"
-        ></IndexShop>
-    </div>
+
+    <mt-loadmore
+            :top-method="loadData"
+            :bottom-method="loadMore"
+            :bottom-all-loaded="allLoaded"
+            ref="loadmore">
+        <!--    商家信息-->
+        <div class="shoplist">
+            <IndexShop
+                    v-for="(item,index) in restaurants"
+                    :key="index"
+                    :restaurant="item.restaurant"
+                    :auto-fill="false"
+                    :bottomPullText="bottomPullText"
+            ></IndexShop>
+        </div>
+    </mt-loadmore>
 
 </div>
 </template>
 <script>
-    import {Swipe,SwipeItem} from 'mint-ui'
+    import {Swipe,SwipeItem,Loadmore} from 'mint-ui'
     import FilterView from '../components/FilterView.vue'
     import IndexShop from '../components/IndexShop.vue'
     export default {
@@ -67,6 +76,7 @@
         components:{
             [Swipe.name]: Swipe,
             [SwipeItem.name]: SwipeItem,
+            [Loadmore.name]: Loadmore,
             FilterView,
             IndexShop
         },
@@ -78,7 +88,9 @@
                 showFilter:false, //显示蒙版
                 page:1,
                 size:5,
-                restaurants:[] //存放所有商家的容器
+                restaurants:[], //存放所有商家的容器
+                allLoaded:false,
+                bottomPullText:'上拉加载更多'
             }
         },
         computed:{
@@ -114,12 +126,9 @@
                     console.log(err)
                 })
                 //拉取商家信息
-                this.$axios.post(`/api/profile/restaurants/1/5`).then(res=>{
-                    console.log(res.data)
-                    this.restaurants=res.data
-                }).catch((err) => {
-                    console.log(err)
-                })
+               this.loadData()
+
+                this.load
             },
             //让搜索框置顶
             showFilterView(isShow){
@@ -128,6 +137,58 @@
             //更新数据
             updateData(condition){
                 console.log(condition)
+            },
+            loadData(){
+                // 加载更多数据
+                // this.$refs.loadmore.onTopLoaded();
+                this.page=1
+                this.allLoaded=false
+                this.bottomPullText="上拉加载更多"
+
+                // 拉取商家信息
+                this.$axios.post(`/api/profile/restaurants/${this.page}/${this.size}`).then(res=>{
+                    console.log(res.data)
+                    //上拉刷新
+                    this.$refs.loadmore.onTopLoaded();
+                    this.restaurants=res.data
+
+                }).catch((err) => {
+                    console.log(err)
+                })
+            },
+            loadMore(){
+            // 加载更多数据
+                //this.allLoaded为false表示还没有全部加载完，!this.allLoaded为true
+                if(!this.allLoaded){
+                    this.page++
+                    // 拉取商家信息
+                    this.$axios.post(`/api/profile/restaurants/${this.page}/${this.size}`).then(res=>{
+                        console.log(res.data)
+                        //下拉加载数据
+                        this.$refs.loadmore.onBottomLoaded();
+                        // this.restaurants=res.data
+                        if(res.data.length>0){
+                            res.data.forEach(item=>{
+                                this.restaurants.push(item)
+                            })
+                            if(res.data<this.size){
+                                //数据为空
+                                this.allLoaded=true
+                                this.bottomPullText="没有更多了哦  "
+                            }
+                        }else{
+                            //数据为空
+                            this.allLoaded=true
+                            this.bottomPullText="没有更多了哦  "
+                        }
+
+                    }).catch((err) => {
+                        console.log(err)
+                    })
+                }
+
+
+
             }
         }
     }
@@ -247,6 +308,7 @@
         top: 0px;
         z-index: 999;
     }
+
 
     .mint-loadmore {
         height: calc(100% - 95px);
