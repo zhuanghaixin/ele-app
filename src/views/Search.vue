@@ -8,8 +8,6 @@
                 <button @click.prevent="searchHandle">搜索</button>
             </form>
         </div>
-
-
         <div class="shop" v-if="result && !showShop">
             <div class="empty-wrap" v-if="empty">
                 <img src="https://fuss10.elemecdn.com/d/60/70008646170d1f654e926a2aaa3afpng.png" alt>
@@ -24,7 +22,21 @@
             </div>
         </div>
         <div class="container" v-if="showShop">
-            商家信息
+            <!--    导航-->
+            <FilterView
+                    :filterData="filterData"
+                    @searchFixed="showFilterView"
+                    @updateData="updateData"
+
+            ></FilterView>
+            <div
+                    class="shoplist"
+                    v-infinite-scroll="loadMore"
+                    :infinite-scroll-disabled="loading"
+            >
+                <IndexShop v-for="(item,index) in restaurants" :key="index" :restaurant="item.restaurant"/>
+
+            </div>
         </div>
 
     </div>
@@ -33,27 +45,52 @@
 <script>
     import Header from '../components/Header.vue'
     import SearchIndex from '../components/SearchIndex.vue'
+    import FilterView from '../components/FilterView.vue'
+    import IndexShop from '../components/IndexShop.vue'
+    import {InfiniteScroll} from 'mint-ui';
 
     export default {
         name: "Search",
+        components: {
+            Header,
+            SearchIndex,
+            FilterView,
+            IndexShop,
+        },
+        directives: {InfiniteScroll},
+
         data() {
             return {
                 key_word: "",
                 result: null,
                 empty: false,
-                showShop:false
+                showShop: false,
+                filterData: null,
+                showFilter: false, //显示蒙版
+                restaurants: [], //存放所有商家的容器
+                page: 0,
+                size: 7,
+                loading: false,
+                data: null, //选择的排序条件
+                list: []
+
             }
         },
         watch: {
             key_word() {
-                this.empty=false
-                this.showShop=false
+                this.empty = false
+                this.showShop = false
                 this.keyWordChange()
             }
         },
-        components: {
-            Header,
-            SearchIndex
+        created() {
+            //重新拉取排序的相关信息
+            this.$axios('/api/profile/filter').then(res => {
+                console.log(res.data)
+                this.filterData = res.data
+            }).catch((err) => {
+                console.log(err)
+            })
         },
         methods: {
 
@@ -84,11 +121,45 @@
                     this.empty = true
                 }
             },
-        //    点击商品 显示商家信息
-            shopItemClick(){
-                this.showShop=true
+            //    点击商品 显示商家信息
+            shopItemClick() {
+                //当我们重新搜索的时候，需要将一些值重新赋值为空
+                this.page=0
+                this.restaurants=[]
+                this.showShop = true
+            },
+            //更新数据
+            updateData(condition) {
+                console.log('condition')
+                console.log(condition)
+                this.data = condition
+                this.shopItemClick()
+            },
+            showFilterView(isShow) {
+                this.showFilter = isShow;
+            },
+            loadMore() {
+                console.log(1)
+                this.page++
+                // 拉取商家信息
+                this.$axios
+                    .post(`/api/profile/restaurants/${this.page}/${this.size}`, this.data)
+                    .then(res => {
+                        console.log(res.data);
+
+                        // this.restaurants = res.data;
+                        if (res.data.length > 0) {
+                            res.data.forEach(item => {
+                                this.restaurants.push(item);
+                            });
+                        } else {
+                            this.loading = true
+                        }
+                    });
             }
+
         }
+
     }
 </script>
 
