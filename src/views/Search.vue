@@ -5,16 +5,26 @@
             <form class="search-wrap">
                 <i class="fa fa-search"></i>
                 <input type="text" v-model="key_word" placeholder="输入商家，商品信息">
-                <button>搜索</button>
+                <button @click.prevent="searchHandle">搜索</button>
             </form>
         </div>
 
 
-        <div class="shop" v-if="result">
-            <div>
-                <SearchIndex :data="result.restaurants"></SearchIndex>
-                <SearchIndex :data="result.words"></SearchIndex>
+        <div class="shop" v-if="result && !showShop">
+            <div class="empty-wrap" v-if="empty">
+                <img src="https://fuss10.elemecdn.com/d/60/70008646170d1f654e926a2aaa3afpng.png" alt>
+                <div class="empty-txt"><h4>
+                    附近没有搜索结果
+                </h4>
+                    <span>换个关键词试试吧</span></div>
             </div>
+            <div v-else>
+                <SearchIndex :data="result.restaurants" @click="shopItemClick"></SearchIndex>
+                <SearchIndex :data="result.words" @click="shopItemClick"></SearchIndex>
+            </div>
+        </div>
+        <div class="container" v-if="showShop">
+            商家信息
         </div>
 
     </div>
@@ -29,11 +39,15 @@
         data() {
             return {
                 key_word: "",
-                result:null
+                result: null,
+                empty: false,
+                showShop:false
             }
         },
         watch: {
             key_word() {
+                this.empty=false
+                this.showShop=false
                 this.keyWordChange()
             }
         },
@@ -55,6 +69,24 @@
                     console.log(err)
                     console.log(this.result)
                 })
+            },
+            searchHandle() {
+                if (!this.key_word) {
+                    console.log('无搜索内容')
+                    return
+                }
+                //  搜索
+                if (this.result && (this.result.restaurants.length > 0 || this.result.words.length)) {
+
+                    console.log('有内容')
+                    this.shopItemClick()
+                } else {
+                    this.empty = true
+                }
+            },
+        //    点击商品 显示商家信息
+            shopItemClick(){
+                this.showShop=true
             }
         }
     }

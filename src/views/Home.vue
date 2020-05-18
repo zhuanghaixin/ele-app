@@ -13,6 +13,7 @@
     <div
             class="search-wrap"
             :class="{'fixedview':showFilter}"
+            @click="$router.push('/search')"
            >
         <div class="shop-search">
             <i class="fa fa-search"></i>
