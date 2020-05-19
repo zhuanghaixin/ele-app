@@ -77,7 +77,7 @@
                         phone: this.phone
                     }).then((res) => {
                         // console.log(111111)
-                        // console.log(res)
+                        console.log(res)
                         console.log(222222)
                         this.validateBtn()
                         // console.log(333333)

@@ -8,20 +8,49 @@
          <div class="nav-back">
             <i class="fa fa-chevron-left" @click="$router.push('/home')"></i>
          </div>
-         <div class="shop-imge">
+         <div class="shop-image">
             <img :src="shopInfo.rst.image_path" alt="">
          </div>
       </nav>
+      <!--   弹窗的title   -->
+      <div class="index-rst" >
+       <!-- 评分月售        -->
+         <div class="rst-name" @click="showInfoModal=true">
+            <span>{{shopInfo.rst.name}}</span>
+            <i class="fa fa-caret-right"></i>
+         </div>
+         <InfoModal
+                 @close="showInfoModal=false"
+                 :rst="shopInfo.rst"
+                 :showInfoModal="showInfoModal"
+         ></InfoModal>
 
+      <!--     优惠信息          -->
+      <div class="rst-order">
+         <span>评分{{shopInfo.rst.rating}}</span>
+         <span>月售{{shopInfo.rst.recent_order_num}}</span>
+         <span>蜂鸟专送约{{shopInfo.rst.order_lead_time}}分钟</span>
+      </div>
+      <!--    公告  -->
+      <p class="rst-promotion">
+         公告：{{shopInfo.rst.promotion_info}}
+      </p>
+
+      </div>
    </div>
 </template>
 
 <script>
+   import InfoModal from "../../components/Shops/InfoModal";
     export default {
         name: "Shop",
+       components:{
+           InfoModal
+       },
        data(){
            return{
-              shopInfo:null
+              shopInfo:null,
+              showInfoModal: false
            }
        },
        created(){
@@ -34,8 +63,18 @@
                  console.log(res.data)
                  this.shopInfo= res.data
               })
-           }
+           },
+          xx(){
+             console.log(111)
+             this.showInfoModal=false
+             console.log('showInfoModal')
+             console.log('xxx',this.showInfoModal)
+          }
+       },
+       components: {
+         InfoModal
        }
+
 
     }
 </script>
