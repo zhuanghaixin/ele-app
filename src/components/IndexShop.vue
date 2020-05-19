@@ -6,7 +6,7 @@
                 <img :src="restaurant.image_path" alt="">
             </div>
 <!--            右侧内容-->
-            <div class="index-main">
+            <div class="index-main" @click="$router.push('/shop')">
 <!--                第一行 品牌-->
                 <div class="index-shopname">
                     <i v-if="restaurant.is_premium">品牌</i>

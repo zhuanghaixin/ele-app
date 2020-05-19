@@ -17,7 +17,7 @@
                     <span>换个关键词试试吧</span></div>
             </div>
             <div v-else>
-                <SearchIndex :data="result.restaurants" @click="shopItemClick"></SearchIndex>
+                <SearchIndex :data="result.restaurants" @click="$router.push('/shop')"></SearchIndex>
                 <SearchIndex :data="result.words" @click="shopItemClick"></SearchIndex>
             </div>
         </div>
