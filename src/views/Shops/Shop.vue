@@ -12,6 +12,7 @@
                 <img :src="shopInfo.rst.image_path" alt="">
             </div>
         </nav>
+        <!--    商家信息        -->
         <!--   弹窗的title   -->
         <div class="index-rst">
             <!-- 评分月售        -->
@@ -39,18 +40,23 @@
             </p>
 
         </div>
+        <!--    导航        -->
+        <NavBar/>
+        <router-view> </router-view>
     </div>
 </template>
 
 <script>
     import InfoModal from "../../components/Shops/InfoModal";
     import Activity from "../../components/Shops/Activity";
+    import NavBar from "../../components/Shops/NavBar"
 
     export default {
         name: "Shop",
         components: {
             InfoModal,
-            Activity
+            Activity,
+            NavBar
         },
         data() {
             return {

@@ -49,7 +49,29 @@ const routes = [
             {
                 path:'/shop',
                 name:'Shop',
+                redirect:"/goods",
                 component: () => import(/* webpackChunkName: "about" */ '../views/Shops/Shop.vue'),
+                children:[
+                    {
+                        path:'/goods',
+                        name:'Goods',
+                        component: () => import(/* webpackChunkName: "about" */ '../views/Shops/Goods.vue'),
+
+                    },
+                    {
+                        path:'/comments',
+                        name:'Comments',
+                        component: () => import(/* webpackChunkName: "about" */ '../views/Shops/Commments.vue'),
+
+                    },
+                    {
+                        path:'/seller',
+                        name:'Seller',
+                        component: () => import(/* webpackChunkName: "about" */ '../views/Shops/Seller.vue'),
+
+                    },
+
+                ]
 
             }
 
@@ -69,6 +91,7 @@ const routes = [
 const router = new VueRouter({
     mode: 'history',
     base: process.env.BASE_URL,
+    linkActiveClass:'active',
     routes
 })
 
