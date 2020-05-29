@@ -2,6 +2,7 @@
 node_modules
 /dist
 /resource
+resource/vue-sell
 
 # local env files
 .env.local
