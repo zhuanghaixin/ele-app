@@ -73,15 +73,18 @@
                 this.$axios("/api/profile/batch_shop")
                     .then((res) => {
                         console.log(res.data)
+                        res.data.recommend.forEach(recommend=>{
+
+                        })
                         this.shopInfo = res.data
                     })
-            },
-            xx() {
-                console.log(111)
-                this.showInfoModal = false
-                console.log('showInfoModal')
-                console.log('xxx', this.showInfoModal)
             }
+            // xx() {
+            //     console.log(111)
+            //     this.showInfoModal = false
+            //     console.log('showInfoModal')
+            //     console.log('xxx', this.showInfoModal)
+            // }
         }
 
 
