@@ -74,17 +74,23 @@
                 </ul>
             </div>
         </div>
+        <!--        购物车-->
+        <ShopCart :shopInfo="shopInfo"></ShopCart>
+
     </div>
 </template>
 
 <script>
     import CartControl from '../../components/Shops/CartControl'
     import BScroll from 'better-scroll'
+    import ShopCart from './ShopCart'
 
     export default {
         name: "Goods",
         components: {
-            CartControl
+            CartControl,
+            ShopCart
+
         },
         data() {
             return {
@@ -217,6 +223,7 @@
         overflow-x: scroll;
         display: flex;
         width: 100%;
+        padding-bottom: 2rem;
     }
 
     .recommend-wrap::-webkit-scrollbar {
@@ -286,7 +293,7 @@
 
     .menu-wrapper {
         overflow-y: auto;
-        /* height: 100%; */
+
         height: calc(100% - 12.8vw); /* 给下面购物车留空隙*/
         background-color: #f8f8f8;
         padding-bottom: 10.666667vw;

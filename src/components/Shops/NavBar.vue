@@ -55,5 +55,6 @@
         left: 45%;
         bottom: 0;
         margin-left: -10px;
+        transition:all 1s ease-in-out;
     }
 </style>

@@ -39,42 +39,7 @@ const routes = [
                 path:'/city',
                 name:'City',
                 component: () => import(/* webpackChunkName: "about" */ '../views/City.vue'),
-            },
-            {
-                path:'/search',
-                name:'Search',
-                component: () => import(/* webpackChunkName: "about" */ '../views/Search.vue'),
-
-            },
-            {
-                path:'/shop',
-                name:'Shop',
-                redirect:"/goods",
-                component: () => import(/* webpackChunkName: "about" */ '../views/Shops/Shop.vue'),
-                children:[
-                    {
-                        path:'/goods',
-                        name:'Goods',
-                        component: () => import(/* webpackChunkName: "about" */ '../views/Shops/Goods.vue'),
-
-                    },
-                    {
-                        path:'/comments',
-                        name:'Comments',
-                        component: () => import(/* webpackChunkName: "about" */ '../views/Shops/Commments.vue'),
-
-                    },
-                    {
-                        path:'/seller',
-                        name:'Seller',
-                        component: () => import(/* webpackChunkName: "about" */ '../views/Shops/Seller.vue'),
-
-                    },
-
-                ]
-
             }
-
         ]
     },
     {
@@ -84,6 +49,40 @@ const routes = [
         // this generates a separate chunk (about.[hash].js) for this route
         // which is lazy-loaded when the route is visited.
         component: () => import(/* webpackChunkName: "about" */ '../views/Login.vue')
+    },
+    {
+        path:'/search',
+        name:'Search',
+        component: () => import(/* webpackChunkName: "about" */ '../views/Search.vue'),
+
+    },
+    {
+        path:'/shop',
+        name:'Shop',
+        redirect:"/goods",
+        component: () => import(/* webpackChunkName: "about" */ '../views/Shops/Shop.vue'),
+        children:[
+            {
+                path:'/goods',
+                name:'Goods',
+                component: () => import(/* webpackChunkName: "about" */ '../views/Shops/Goods.vue'),
+
+            },
+            {
+                path:'/comments',
+                name:'Comments',
+                component: () => import(/* webpackChunkName: "about" */ '../views/Shops/Commments.vue'),
+
+            },
+            {
+                path:'/seller',
+                name:'Seller',
+                component: () => import(/* webpackChunkName: "about" */ '../views/Shops/Seller.vue'),
+
+            },
+
+        ]
+
     }
 ];
 
