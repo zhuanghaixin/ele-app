@@ -3,11 +3,12 @@
         <div class="bottomNav-cartfooter" :class="{'bottomNav-carticon-empty':isEmpty}">
             <span class="bottomNav-carticon">
                 <i class="fa fa-cart-plus"></i>
+                <span v-if="totalCount">{{totalCount}}</span>
             </span>
             <div class="bottomNav-cartInfo">
                 <p class="bottomNav-carttotal">
                     <span v-if="isEmpty">未选购商品</span>
-                    <span v-else>¥0</span>
+                    <span v-else>¥{{totalPrice.toFixed(2)}}</span>
                 </p>
                 <p class="bottomNav-cartdelivery">
                     另需配送费{{shopInfo.rst.float_delivery_fee}}元
@@ -27,11 +28,46 @@
         props:{
             shopInfo:Object
         },
+        data(){
+            return{
+                totalCount:0,
+                totalPrice:0,
+                selectFoods:[]
+            }
+        },
         computed:{
             isEmpty(){
                 let empty=true;
+                //将水平
+                this.totalCount=0
+                this.totalPrice=0
+                this.selectFoods=[]
+                this.shopInfo.recommend.forEach(recommend=>{
+                    recommend.items.forEach(item=>{
+                        if(item.count){
+                            empty=false
+                            this.totalCount+=item.count
+                            this.totalPrice+=item.activity.fixed_price*item.count
+                            this.selectFoods.push(item)
+                        }
+                    })
+                })
+                this.shopInfo.menu.forEach(menu=>{
+                    menu.foods.forEach(food=>{
+                        if(food.count){
+                            empty=false
+                            this.totalCount+=food.count
+                            this.totalPrice+=food.activity.fixed_price*food.count
+                            this.selectFoods.push(food)
+                        }
+                    })
+                })
+
                 return empty
             }
+        },
+        created(){
+            console.log(this.shopInfo)
         }
     }
 </script>
