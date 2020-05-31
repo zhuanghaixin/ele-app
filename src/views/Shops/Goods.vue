@@ -53,6 +53,7 @@
                         </div>
                         <!-- 内容下 -->
                         <div
+                                @click="handleFood(food)"
                                 class="fooddetails"
                                 v-for="(food,i) in item.foods"
                                 :key="i"
@@ -76,7 +77,13 @@
         </div>
         <!--        购物车-->
         <ShopCart :shopInfo="shopInfo" ref="shopCart"></ShopCart>
-
+        <!--        商品详情        -->
+        <Food
+                :food="selectedFood"
+                :isShow="showFood"
+                @close="foodClose"
+                @ballAdd="onAdd"
+        />
     </div>
 </template>
 
@@ -84,12 +91,14 @@
     import CartControl from '../../components/Shops/CartControl'
     import BScroll from 'better-scroll'
     import ShopCart from './ShopCart'
+    import Food from './Food'
 
     export default {
         name: "Goods",
         components: {
             CartControl,
-            ShopCart
+            ShopCart,
+            Food
 
         },
         data() {
@@ -99,7 +108,9 @@
                 foodScroll: {},//右侧滚动对象
                 scrollY: 0, //右侧菜单当前滚动到的y值
                 listHeight: [],//12个区的列表高度
-                currentIndex: null
+                currentIndex: null,
+                selectedFood:null,
+                showFood:false
             }
         },
         created() {
@@ -200,6 +211,17 @@
                 console.log('小球')
                 this.$refs.shopCart.drop(el)
                 console.log('xxxx')
+            },
+
+            //选择
+            handleFood(food){
+                console.log(food)
+                this.selectedFood=food
+                this.showFood=true
+            },
+            //关闭商品详情页面
+            foodClose(){
+                this.showFood=false
             }
         }
     }
