@@ -19,7 +19,7 @@
                         </div>
                         <div class="recommend-food-price">
                             <p>¥{{item.activity.fixed_price}}</p>
-                            <CartControl :food="item"></CartControl>
+                            <CartControl :food="item" @add="onAdd"></CartControl>
                         </div>
                     </li>
                 </ul>
@@ -66,7 +66,7 @@
                                 <p class="fooddetails-sales">月售{{food.month_sales}}份 好评率{{food.satisfy_rate}}</p>
                                 <div class="fooddetails-price">
                                     <span class="price">¥{{food.activity.fixed_price}}</span>
-                                    <CartControl :food="food"/>
+                                    <CartControl :food="food" @add="onAdd"/>
                                 </div>
                             </section>
                         </div>
@@ -75,7 +75,7 @@
             </div>
         </div>
         <!--        购物车-->
-        <ShopCart :shopInfo="shopInfo"></ShopCart>
+        <ShopCart :shopInfo="shopInfo" ref="shopCart"></ShopCart>
 
     </div>
 </template>
@@ -194,8 +194,13 @@
                 }
                 console.log(this.listHeight)
 
+            },
+            //小球飞入动画
+            onAdd(el){
+                console.log('小球')
+                this.$refs.shopCart.drop(el)
+                console.log('xxxx')
             }
-
         }
     }
 </script>
