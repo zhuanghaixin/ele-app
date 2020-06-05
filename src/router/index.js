@@ -96,7 +96,20 @@ const router = new VueRouter({
 
 // 路由守卫
 router.beforeEach((to, from, next) => {
-        const isLogin = localStorage.ele_login ? true : false
+    console.log('localStorage.ele_login')
+    console.log(localStorage.ele_login)
+    console.log('typeof localStorage.ele_login')
+    console.log(typeof localStorage.ele_login)
+    let isLogin
+        // const isLogin = localStorage.ele_login ? true : false
+    if(localStorage.ele_login){
+        isLogin=true
+    }else{
+        isLogin=false
+    }
+    console.log('isLogin')
+    console.log(isLogin)
+
         if (to.path == '/login') {
             next()
         } else {

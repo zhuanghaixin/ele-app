@@ -138,7 +138,10 @@
                     console.log(res)
                     //设置登录状态 并跳转
                     //本地存储登录状态
-                    localStorage.setItem("ele_login", true)
+                    console.log(res.data)
+
+                    console.log(res.data.cc)
+                    localStorage.setItem("ele_login", res.data.user._id)
                     this.$router.push('/')
                 }).catch((err) => {
                     //返回错误信息
