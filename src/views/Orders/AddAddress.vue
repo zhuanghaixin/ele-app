@@ -3,17 +3,25 @@
         <Header :isLeft="true" :title="title"></Header>
 <!--        添加地址-->
         <div class="viewbody">
+            <div class="content">
+                <FormBlock label="联系人" placeholder="姓名"></FormBlock>
+                <FormBlock label="电话" placeholder="手机号码"></FormBlock>
+                <FormBlock label="地址" placeholder="小区/写字楼/学校等" icon="angle-right"></FormBlock>
+                <FormBlock label="门牌号" placeholder="3号楼六单元303" icon="edit" textarea="textarea"></FormBlock>
 
+            </div>
         </div>
     </div>
 </template>
 
 <script>
     import Header from '../../components/Header'
+    import FormBlock from '../../components/Orders/FormBlock'
     export default {
         name: "AddAddress",
         components:{
-            Header
+            Header,
+            FormBlock
         },
         data(){
             return{
