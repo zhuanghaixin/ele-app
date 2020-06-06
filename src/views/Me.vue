@@ -17,6 +17,16 @@
             </div>
             <i class="fa fa-angle-right"></i>
         </div>
+        <div v-if="userInfo">
+            <div class="address-cell">
+                <i class="fa fa-map-marker"></i>
+                <div class="address-index" @click="myAddress">
+                    <span>我的地址</span>
+                    <i class="fa fa-angle-right"></i>
+                </div>
+            </div>
+            <button @click="handleLogout" class="loginOut-btn">退出登录</button>
+        </div>
     </div>
 </template>
 
@@ -47,6 +57,21 @@
             encryptPhone(phone) {
 
                 return phone.replace(/(\d{3})\d{4}(\d{4})/, "$1****$2");
+            },
+            //跳到我的地址
+            myAddress(){
+                console.log(this.userInfo.myAddress)
+                if(this.userInfo.myAddress.length>0){
+                    console.log(11111111)
+                    this.$router.push("/myAddress")
+                }else{
+                    this.$router.push("/addAddress")
+                }
+            },
+            //登出
+            handleLogout(){
+                localStorage.removeItem("ele_login")
+                this.$router.push("/login")
             }
 
         }
