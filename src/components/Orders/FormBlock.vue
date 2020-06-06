@@ -3,14 +3,15 @@
         <div class="label-wrap">
             {{label}}
         </div>
-        <div class="input-group-wrap">
+        <div class="input-group-wrap" @click="$emit('click')">
             <div class="input-wrap">
                 <input
                         v-if="!textarea"
                         :type="type"
-                        :vlaue="value"
+                        :value="value"
                         :placeholder="placeholder"
                         @input="$emit('input',$event.target.value)"
+
                 >
                 <textarea
                           v-else
@@ -24,7 +25,8 @@
                 </textarea>
                 <i
                         v-if="icon"
-                        :class="'fa fa-'+icon"></i>
+                        :class="'fa fa-'+icon"
+                ></i>
             </div>
             <TabTag
                     v-if="tags"
