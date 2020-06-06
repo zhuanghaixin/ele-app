@@ -26,13 +26,24 @@
                         v-if="icon"
                         :class="'fa fa-'+icon"></i>
             </div>
+            <TabTag
+                    v-if="tags"
+                    :tags="tags"
+                    @checkTag="checkTag"
+                    :selectTag="sex"
+            ></TabTag>
         </div>
+
     </div>
 </template>
 
 <script>
+    import TabTag from './TabTag'
     export default {
         name: "FormBlock",
+        components:{
+            TabTag
+        },
         props:{
             type:{
               type: String,
@@ -42,7 +53,17 @@
             value:String,
             placeholder:String,
             icon:String,
-            textarea:String
+            textarea:String,
+            tags:{
+                type:Array
+            },
+            sex:String
+        },
+        methods:{
+            checkTag(item){
+                console.log(item)
+                this.$emit("checkSex",item)
+            }
         }
     }
 </script>
