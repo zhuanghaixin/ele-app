@@ -30,6 +30,7 @@
 </template>
 
 <script>
+
     export default {
         name: "AddressSearch",
         props: {
@@ -46,7 +47,6 @@
             search_address(val) {
                 console.log(val)
                 this.searchPlace(val)
-                this.$emit('xx', val)
 
             }
         },
