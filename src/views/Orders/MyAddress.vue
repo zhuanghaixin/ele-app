@@ -1,6 +1,26 @@
 <template>
     <div class="myAddress">
         <Header :isLeft="true" :title="title"></Header>
+        <!-- 显示收获地址       -->
+        <div class="address-view">
+            <div class="address-card" v-for="(address,index) in allAddress" :key="index">
+                <div class="address-card-select">
+                    <i class="fa fa-check-circle" v-if="selectIndex == index"></i>
+                </div>
+
+                <div class="address-card-body" @click="setAddressInfo(address,index)">
+                    <p class="address-card-title">
+                        <span class="username">{{address.name}}</span>
+                        <span v-if="address.sex" class="gender">{{address.sex}}</span>
+                        <span class="phone">{{address.phone}}</span>
+                    </p>
+                    <p class="address-card-address">
+                        <span class="tag" v-if="address.tag">{{address.tag}}</span>
+                        <span class="address-text">{{address.address}}</span>
+                    </p>
+                </div>
+            </div>
+        </div>
         <!-- 新增收货地址 -->
         <div class="address-view-bottom" @click="addAddress">
             <i class="fa fa-plus-circle"></i>
@@ -18,12 +38,22 @@
         },
         data(){
             return{
-                title:'我的地址'
+                title:'我的地址',
+                allAddress:[]
             }
+        },
+        beforeRouteEnter(to,from,next){
+            next(vm=>vm.getData())
         },
         methods:{
             addAddress(){
                 this.$router.push("/addAddress")
+            },
+            getData(){
+                this.$axios(`/api/user/user_info/${localStorage.ele_login}`).then(res=>{
+                    console.log(res.data)
+                    this.allAddress = res.data.myAddress
+                })
             }
         }
 
