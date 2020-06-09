@@ -43,7 +43,9 @@
             </div>
             <button class="submit-btn">
                 <span v-if="isEmpty">¥{{shopInfo.rst.float_minimum_order_amount}}元起送</span>
-                <span v-else>去结算</span>
+                <span
+                        @click="settlement"
+                        v-else>去结算</span>
             </button>
         </div>
         <!-- 小球容器        -->
@@ -192,9 +194,19 @@
                     ball.show = false
                     el.style.display = 'none'
                 }
-            }
+            },
 
+            //跳转结算页面
+            settlement(){
+                this.$store.dispatch("setOrderInfo",{
+                    shopInfo:this.shopInfo.rst,
+                    selectFoods:this.selectFoods
+                })
+                this.$router.push('/settlement')
+
+            }
         }
+
 
     }
 </script>
