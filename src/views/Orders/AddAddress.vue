@@ -62,7 +62,7 @@
         },
         data() {
             return {
-                title: '添加地址',
+                title: '',
                 tags: ["家", "学校", "公司"],
                 sexs: ["先生", "女士"],
                 addressInfo: {
@@ -76,6 +76,15 @@
                 showSearch: false,
 
             }
+        },
+        beforeRouteEnter(to,from,next){
+            next(vm=>{
+                console.log('to.params.addressInfo')
+                console.log(to.params.addressInfo)
+               vm.addressInfo=to.params.addressInfo
+                vm.title=to.params.title
+
+            })
         },
         methods: {
             addAddress() {
@@ -110,12 +119,17 @@
                     this.showMsg('请输入收获地址')
                     return
                 }
-                if (!this.addressInfo.address) {
+                if (!this.addressInfo.bottom) {
                     this.showMsg('请输入门牌号')
                     return
                 }
                 //存储数据
-                this.saveAddress()
+                if(this.title=='添加地址'){
+                    this.saveAddress()
+                }else{
+                    this.editAddress()
+                }
+
             },
             //显示提示
             showMsg(msg) {
@@ -134,7 +148,18 @@
                 }).catch(err =>{
                     console.log(err)
                 })
+            },
+            editAddress(){
+                this.$axios.post(`/api/user/edit_address/${localStorage.ele_login}/${this.addressInfo._id}`,this.addressInfo)
+                    .then(res => {
+                        console.log(res.data)
+                        this.$router.push('myAddress')
+                    }).catch(err =>{
+                    console.log(err)
+                })
             }
+
+
     }
 
 

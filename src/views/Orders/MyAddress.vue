@@ -5,7 +5,7 @@
         <div class="address-view">
             <div class="address-card" v-for="(address,index) in allAddress" :key="index">
                 <div class="address-card-select">
-                    <i class="fa fa-check-circle" v-if="selectIndex == index"></i>
+<!--                    <i class="fa fa-check-circle" v-if="selectIndex == index"></i>-->
                 </div>
 
                 <div class="address-card-body" @click="setAddressInfo(address,index)">
@@ -18,6 +18,10 @@
                         <span class="tag" v-if="address.tag">{{address.tag}}</span>
                         <span class="address-text">{{address.address}}</span>
                     </p>
+                </div>
+                <div class="address-card-edit">
+                    <i @click="handleEdit(address)" class="fa fa-edit"></i>
+                    <i @click="handleDelete(address,index)" class="fa fa-close"></i>
                 </div>
             </div>
         </div>
@@ -47,13 +51,44 @@
         },
         methods:{
             addAddress(){
-                this.$router.push("/addAddress")
+                this.$router.push({
+                    name:"AddAddress",
+                    params:{
+                        title:"添加地址",
+                        addressInfo:{
+                            name:'',
+                            sex:'',
+                            phone:'',
+                            address:'',
+                            bottom:'',
+                            tag:''
+                        }
+                    }
+                })
             },
             getData(){
                 this.$axios(`/api/user/user_info/${localStorage.ele_login}`).then(res=>{
                     console.log(res.data)
                     this.allAddress = res.data.myAddress
                 })
+            },
+            //编辑
+            handleEdit(address){
+                this.$router.push({
+                    name:"AddAddress",
+                    params:{
+                        title:"编辑地址",
+                        addressInfo:address
+                    }
+                })
+            },
+            //删除
+            handleDelete(address,index){
+                this.$axios.delete(`/api/user/address/${localStorage.ele_login}/${address._id}`).then(
+                    res=>{
+                        this.allAddress.splice(index,1)
+                    }
+                )
             }
         }
 

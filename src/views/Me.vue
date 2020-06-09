@@ -65,7 +65,20 @@
                     console.log(11111111)
                     this.$router.push("/myAddress")
                 }else{
-                    this.$router.push("/addAddress")
+                    this.$router.push({
+                        name:"AddAddress",
+                        params:{
+                            title:"添加地址",
+                            addressInfo:{
+                                name:'',
+                                sex:'',
+                                phone:'',
+                                address:'',
+                                bottom:'',
+                                tag:''
+                            }
+                        }
+                    })
                 }
             },
             //登出
