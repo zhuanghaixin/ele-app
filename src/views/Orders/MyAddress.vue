@@ -5,7 +5,7 @@
         <div class="address-view">
             <div class="address-card" v-for="(address,index) in allAddress" :key="index">
                 <div class="address-card-select">
-<!--                    <i class="fa fa-check-circle" v-if="selectIndex == index"></i>-->
+                    <i class="fa fa-check-circle" v-if="selectIndex == index"></i>
                 </div>
 
                 <div class="address-card-body" @click="setAddressInfo(address,index)">
@@ -43,7 +43,8 @@
         data(){
             return{
                 title:'我的地址',
-                allAddress:[]
+                allAddress:[],
+                selectIndex:0
             }
         },
         beforeRouteEnter(to,from,next){
@@ -89,6 +90,15 @@
                         this.allAddress.splice(index,1)
                     }
                 )
+            },
+            //选择收货地址
+            setAddressInfo(address,index){
+                this.selectIndex = index
+                console.log('this.selectIndex')
+                console.log(this.selectIndex)
+                //将address对象存储到vuex中
+                this.$store.dispatch("setUserInfo",address)
+                this.$router.push("/settlement")
             }
         }
 

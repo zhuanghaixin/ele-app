@@ -7,21 +7,24 @@ Vue.use(Vuex)
 const types = {
     SET_LOCATION: "SET_LOCATION",
     SET_ADDRESS: "SET_ADDRESS",
-    ORDER_INFO: "ORDER_INFO"
+    ORDER_INFO: "ORDER_INFO",
+    USER_INFO: "USER_INFO"
 }
 
 //state
 const state = {
     location: {},
     address: "",
-    orderInfo:null
+    orderInfo:null,
+    userInfo:null,
 }
 
 //getters
 const getters = {
     location: state => state.location,
     address: state => state.address,
-    orderInfo:state=>state.orderInfo
+    orderInfo:state=>state.orderInfo,
+    userInfo:state=>state.userInfo
 }
 
 //mutations
@@ -46,6 +49,13 @@ const mutations = {
         } else {
             state.orderInfo = null
         }
+    },
+    [types.USER_INFO](state,userInfo){
+        if (userInfo) {
+            state.userInfo = userInfo
+        } else {
+            state.userInfo = null
+        }
     }
 }
 const actions = {
@@ -57,6 +67,9 @@ const actions = {
     },
     setOrderInfo:({commit},orderInfo)=>{
         commit(types.ORDER_INFO, orderInfo)
+    },
+    setUserInfo:({commit},userInfo)=>{
+        commit(types.USER_INFO, userInfo)
     }
 
 

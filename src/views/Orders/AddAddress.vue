@@ -144,6 +144,9 @@
                 this.$axios.post(`/api/user/add_address/${localStorage.ele_login}`,this.addressInfo)
                     .then(res => {
                         console.log(res.data)
+                        if(!this.$store.getters.userInfo){
+                            this.$store.dispatch("setUserInfo",this.addressInfo)
+                        }
                         this.$router.push('myAddress')
                 }).catch(err =>{
                     console.log(err)
@@ -158,11 +161,7 @@
                     console.log(err)
                 })
             }
-
-
     }
-
-
     }
 </script>
 

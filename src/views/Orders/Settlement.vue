@@ -1,15 +1,91 @@
 <template>
-    <div class="settlement">去结算
+    <div class="settlement">
         <Header :isLeft="true" title="确认订单"></Header>
+        <div class="view-body">
+            <div class="">
+                <!--                收获地址-->
+                <section class="cart-address">
+                    <p class="title">订单配送至
+                        <span class="address-tag" v-if="userInfo">
+                            {{userInfo.tag}}
+                        </span>
+                    </p>
+                    <p class="address-detail">
+                        <span v-if="userInfo" @click="$router.push('/myAddress')">
+                            {{userInfo.address}}
+                            {{userInfo.bottom}}
+                        </span >
+                        <span v-else>
+                            <span v-if="haveAddress" @click="$router.push('/myAddress')">选择收获地址</span>
+                            <span v-else @click="addAddress">新增收获地址</span>
+                        </span>
+                        <i class="fa fa-angle-right"></i>
+                    </p>
+                    <h2 v-if="userInfo" class="address-name">
+                        <span>{{userInfo.name}}</span>
+                        <span v-if="userInfo.sex">({{userInfo.sex}})</span>
+                        <span class="phone">{{userInfo.phone}}</span>
+                    </h2>
+                </section>
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
     import Header from '../../components/Header'
+
     export default {
         name: "Settlement",
-        components:{
+        components: {
             Header
+        },
+        data() {
+            return {
+                haveAddress: false
+            }
+        },
+        computed: {
+            userInfo() {
+                return this.$store.getters.userInfo
+            }
+        },
+        beforeRouteEnter(to, from, next) {
+
+            next(vm =>{
+                if(!vm.userInfo){
+                    vm.getData()
+                }
+            })
+
+        },
+        methods: {
+            addAddress() {
+                this.$router.push({
+                    name: "AddAddress",
+                    params: {
+                        title: "添加地址",
+                        addressInfo: {
+                            name: '',
+                            sex: '',
+                            phone: '',
+                            address: '',
+                            bottom: '',
+                            tag: ''
+                        }
+                    }
+                })
+            },
+            getData() {
+                this.$axios(`/api/user/user_info/${localStorage.ele_login}`).then(res => {
+                    console.log(res.data)
+                    if (res.data.myAddress.length > 0) {
+                        this.haveAddress = true
+                    } else {
+                        this.haveAddress = false
+                    }
+                })
+            }
         }
     }
 </script>
@@ -44,6 +120,7 @@
         flex-direction: column;
         flex-grow: 1;
     }
+
     .cart-address {
         background-color: transparent;
         padding: 4.266667vw 2.133333vw 2.933333vw 2.133333vw;
@@ -51,11 +128,13 @@
         color: #fff;
         overflow: hidden;
     }
+
     .cart-address .title {
         font-size: 0.9rem;
         line-height: 1.21;
         color: hsla(0, 0%, 100%, 0.8);
     }
+
     .cart-address .address-detail {
         font-size: 1.3rem;
         font-weight: 600;
@@ -64,6 +143,7 @@
         display: flex;
         align-items: center;
     }
+
     .address-detail > span {
         display: inline-block;
         overflow: hidden;
@@ -71,6 +151,7 @@
         white-space: nowrap;
         max-width: calc(100% - 4vw);
     }
+
     .address-detail > i {
         margin-left: 2.133333vw;
     }
@@ -81,9 +162,11 @@
         line-height: 1.21;
         margin-bottom: 1.333333vw;
     }
+
     .address-name .phone {
         margin-left: 2.133333vw;
     }
+
     .address-tag {
         border: 0.133334vw solid hsla(0, 0%, 100%, 0.8);
         margin-left: 1.6vw;
@@ -112,6 +195,7 @@
         background: #3c3c3c;
         z-index: 2;
     }
+
     .action-bar > span {
         color: #fff;
         font-size: 1.2rem;
@@ -119,6 +203,7 @@
         padding-left: 2.666667vw;
         vertical-align: middle;
     }
+
     .action-bar > button {
         position: absolute;
         top: 0;
