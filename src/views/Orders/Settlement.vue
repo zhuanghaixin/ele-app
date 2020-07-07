@@ -2,7 +2,7 @@
     <div class="settlement">
         <Header :isLeft="true" title="确认订单"></Header>
         <div class="view-body">
-            <div class="">
+            <div class>
                 <!--                收获地址-->
                 <section class="cart-address">
                     <p class="title">订单配送至
@@ -27,6 +27,8 @@
                         <span class="phone">{{userInfo.phone}}</span>
                     </h2>
                 </section>
+            <!--      送达时间          -->
+            <Delivery :shopInfo="orderInfo.shopInfo"></Delivery>
             </div>
         </div>
     </div>
@@ -34,11 +36,13 @@
 
 <script>
     import Header from '../../components/Header'
+    import Delivery from '../../components/Orders/Delivery'
 
     export default {
         name: "Settlement",
         components: {
-            Header
+            Header,
+            Delivery
         },
         data() {
             return {
@@ -48,7 +52,11 @@
         computed: {
             userInfo() {
                 return this.$store.getters.userInfo
+            },
+            orderInfo(){
+                return this.$store.getters.orderInfo
             }
+
         },
         beforeRouteEnter(to, from, next) {
 
