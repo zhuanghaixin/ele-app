@@ -1,7 +1,7 @@
 <template>
     <div class="settlement">
         <Header :isLeft="true" title="确认订单"></Header>
-        <div class="view-body">
+        <div class="view-body" v-if="orderInfo">
             <div class>
                 <!--                收获地址-->
                 <section class="cart-address">
@@ -14,7 +14,7 @@
                         <span v-if="userInfo" @click="$router.push('/myAddress')">
                             {{userInfo.address}}
                             {{userInfo.bottom}}
-                        </span >
+                        </span>
                         <span v-else>
                             <span v-if="haveAddress" @click="$router.push('/myAddress')">选择收获地址</span>
                             <span v-else @click="addAddress">新增收获地址</span>
@@ -27,8 +27,26 @@
                         <span class="phone">{{userInfo.phone}}</span>
                     </h2>
                 </section>
-            <!--      送达时间          -->
-            <Delivery :shopInfo="orderInfo.shopInfo"></Delivery>
+                <!--      送达时间          -->
+                <Delivery :shopInfo="orderInfo.shopInfo"></Delivery>
+                <!--       点餐内容--->
+                <CartGroup :orderInfo="orderInfo" :totalPrice="totalPrice" ></CartGroup>
+                <!--        备注信息                -->
+                <section class="checkout-section">
+                    <CartItem
+                            @click="showTableware=true"
+                            title="餐具份数"
+                            :subHead="remarkInfo.tableware||'未选择'"
+                    />
+                    <CartItem
+                            title="订单备注"
+                            :subHead="remarkInfo.remark||'口味 偏好'"
+                            @click="$router.push('/remark')"
+                    />
+                    <CartItem title="发票信息" subHead="不需要开发票"/>
+                </section>
+                <!--    显示Tableware              -->
+                <Tableware :isShow="showTableware" @close="showTableware=false"></Tableware>
             </div>
         </div>
     </div>
@@ -37,31 +55,44 @@
 <script>
     import Header from '../../components/Header'
     import Delivery from '../../components/Orders/Delivery'
+    import CartGroup from '../../components/Orders/CartGroup'
+    import CartItem from '../../components/Orders/CartItem'
+    import Tableware from '../../components/Orders/Tableware.vue'
 
     export default {
         name: "Settlement",
         components: {
             Header,
-            Delivery
+            Delivery,
+            CartGroup,
+            CartItem,
+            Tableware
         },
         data() {
             return {
-                haveAddress: false
+                haveAddress: false,
+                showTableware: false,
             }
         },
         computed: {
             userInfo() {
                 return this.$store.getters.userInfo
             },
-            orderInfo(){
+            orderInfo() {
                 return this.$store.getters.orderInfo
+            },
+            totalPrice(){
+                return this.$store.getters.totalPrice
+            },
+            remarkInfo() {
+                return this.$store.getters.remarkInfo
             }
 
         },
         beforeRouteEnter(to, from, next) {
 
-            next(vm =>{
-                if(!vm.userInfo){
+            next(vm => {
+                if (!vm.userInfo) {
                     vm.getData()
                 }
             })
