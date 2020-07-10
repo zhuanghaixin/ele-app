@@ -49,6 +49,10 @@
                 <Tableware :isShow="showTableware" @close="showTableware=false"></Tableware>
             </div>
         </div>
+        <footer class="action-bar">
+            <span>¥{{totalPrice}}</span>
+            <button @click="handlePay()">去支付</button>
+        </footer>
     </div>
 </template>
 
@@ -58,6 +62,8 @@
     import CartGroup from '../../components/Orders/CartGroup'
     import CartItem from '../../components/Orders/CartItem'
     import Tableware from '../../components/Orders/Tableware.vue'
+    import {Toast} from 'mint-ui'
+
 
     export default {
         name: "Settlement",
@@ -66,7 +72,8 @@
             Delivery,
             CartGroup,
             CartItem,
-            Tableware
+            Tableware,
+            [Toast.name]: Toast,
         },
         data() {
             return {
@@ -124,6 +131,17 @@
                         this.haveAddress = false
                     }
                 })
+            },
+            handlePay(){
+                if(!this.userInfo){
+                    Toast({
+                        message:'请选择收获地址',
+                        position:'bottom',
+                        duration:2000
+                    })
+                    return
+                }
+                this.$router.push("/pay")
             }
         }
     }
