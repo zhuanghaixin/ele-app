@@ -31,6 +31,7 @@
 
 <script>
     import Header from "../../components/Header";
+
     export default {
         name: "Pay",
         components: {
@@ -46,6 +47,7 @@
         beforeRouteEnter(to, from, next) {
             next(vm => {
                 vm.countTimeDown();
+                // vm.addOrder()
             })
         },
         computed: {
@@ -64,7 +66,7 @@
         },
         methods: {
             countTimeDown() {
-                let minute = 15
+                let minute = 14
                 let second = 59
                 this.timer = setInterval(() => {
                     second--
@@ -87,9 +89,65 @@
                     this.countDown = "00:" + minute + ":" + second
                 }, 1000)
             },
-            pay(){
+            pay() {
+                const data = {
+                    body: '米修在线',
+                    out_trade_no: new Date().getTime().toString(),
+                    total_fee: 1
+                }
+                alert("进入到pay方法中");
+                // 请求 http://www.thenewstep.cn/wxzf/example/jsapi.php
+                fetch("http://www.thenewstep.cn/wxzf/example/jsapi.php", {
+                    method: "POST",
+                    headers: {
+                        "Content-type": "application/json"
+                    },
+                    body: JSON.stringify(data)
+                }).then(res => res.json()).then(data => {
+                    this.onBridgeReady(data);
+                }).catch(err => {
+                    //生成订单
+                    alert("支付成功");
+                    this.addOrder()
+
+                })
+                // this.$axios.post('/wxzf',JSON.stringify(data)).then(data => {
+                //     this.onBridgeReady(data);
+                // }).catch(err=>{
+                //     // alert('请求失败')
+                //     //生成订单
+                //     this.addOrder()
+                //
+                //
+                // })
+
+            },
+            onBridgeReady(data){
+                WeixinJSBridge.invoke(
+                    'getBrandWCPayRequest',data,
+                    (res)=>{
+                        if(res.err_msg == "get_brand_wcpay_request:ok" ){
+                            // 使用以上方式判断前端返回,微信团队郑重提示：
+                            //res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
+                            alert("支付成功")
+                        }
+                    });
+            },
+            addOrder(){
+                let orderList={
+                    orderInfo:this.orderInfo,
+                    userInfo:this.userInfo,
+                    totalPrice:this.totalPrice,
+                    remarkInfo:this.remarkInfo
+                }
+                console.log(orderList)
+                this.$axios.post(`/api/user/add_order/${localStorage.ele_login}`,orderList).then(res=>{
+                    console.log(res.data)
+                    this.$router.push("/order")
+                })
 
             }
+
         }
     }
 
@@ -109,6 +167,7 @@
         overflow: auto;
         box-sizing: border-box;
     }
+
     .tip {
         display: block;
         text-align: center;
@@ -117,27 +176,33 @@
         padding: 2rem;
         line-height: 2rem;
     }
+
     countdown-title {
         font-size: 0.88rem;
         color: #999;
     }
+
     .countdown-text {
         height: 2rem;
         color: #333;
         font-size: 1.8rem;
     }
+
     down-text {
         height: 2rem;
         color: #333;
         font-size: 1.8rem;
     }
+
     .list {
         border-bottom: 0.5px solid #eee;
         background: #fff;
     }
+
     .info-list {
         padding: 0 1.5rem;
     }
+
     .info-list li {
         border-top: 0.5px solid #eee;
         display: flex;
@@ -146,6 +211,7 @@
         line-height: 1rem;
         justify-content: space-between;
     }
+
     .info-list li .order-name {
         color: #333;
         display: inline-block;
@@ -156,9 +222,11 @@
         margin-right: 16px;
         max-width: 60%;
     }
+
     .text-highlight {
         color: #ff6000;
     }
+
     .title {
         background-color: #f5f5f5;
         font-size: 0.88rem;
@@ -168,6 +236,7 @@
         justify-content: space-between;
         align-items: center;
     }
+
     .payment-list-item {
         border-bottom: 0.5px solid #eee;
         padding: 0.9rem 1rem;
@@ -176,26 +245,32 @@
         align-items: center;
         justify-content: space-between;
     }
+
     .icon {
         display: flex;
         align-items: center;
     }
+
     .payment-list-item img {
         width: 2.4rem;
         height: 2.4rem;
         margin-right: 20px;
     }
+
     .payment-list-item > i {
         font-size: 1.5rem;
         color: #eee;
     }
+
     .selected {
         color: #4cd964 !important;
     }
+
     .btn-submit-wrap {
         margin: 1rem auto;
         width: 90%;
     }
+
     .btn-submit {
         font-size: 1.1rem;
         line-height: 1.5rem;

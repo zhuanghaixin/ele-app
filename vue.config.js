@@ -1,4 +1,5 @@
 module.exports = {
+    // publicPath:"/wxzf/dist/" ,   //打包文件相对路径
     devServer: {
         open: true,
         // host: 'localhost',
@@ -14,7 +15,15 @@ module.exports = {
                 pathRewrite: {
                     '^/api': ''
                 }
-            }
+            },
+            // '/wxzf': {
+            //     target: 'http://www.thenewstep.cn/wxzf/example/jsapi.php',
+            //     ws: true,
+            //     changOrigin: true,
+            //     pathRewrite: {
+            //         '^/wxzf': ''
+            //     }
+            // }
         }
     },
     chainWebpack:(config)=>{

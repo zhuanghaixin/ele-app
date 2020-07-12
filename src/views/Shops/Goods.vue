@@ -279,7 +279,7 @@
 
     .recommend-food .recommend-food-name {
         color: #333;
-        font-size: 0.8rem;
+        font-size: 1rem;
         margin: 1.866667vw 0 1.233333vw;
         white-space: nowrap;
         text-overflow: ellipsis;
@@ -288,7 +288,7 @@
 
     .recommend-food .recommend-food-zm {
         color: #999;
-        font-size: 0.6rem;
+        font-size: 0.8rem;
         margin-bottom: 1.866667vw;
         min-height: 1em;
     }
@@ -329,7 +329,7 @@
 
     .menu-wrapper li {
         padding: 4.666667vw 2vw;
-        font-size: 0.6rem;
+        font-size: 0.8rem;
         color: #666;
         line-height: 1.2;
     }
@@ -409,7 +409,7 @@
 
     .fooddetails-des {
         margin: 1.333333vw 0;
-        font-size: 0.6rem;
+        font-size: 0.8rem;
         color: #999;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -420,7 +420,7 @@
     .fooddetails-sales {
         margin: 1.733333vw 0 !important;
         color: #999;
-        font-size: 0.6rem;
+        font-size: 0.8rem;
         line-height: 1;
         min-height: 1em;
     }

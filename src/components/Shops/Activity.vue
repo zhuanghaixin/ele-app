@@ -49,7 +49,7 @@
         color: #333;
         margin: 3.2vw auto 0;
         align-items: center;
-        font-size: 0.6rem;
+        font-size: 0.8rem;
         width: 80vw;
     }
     .rst-activity .activity-txt {

@@ -6,6 +6,7 @@ import 'mint-ui/lib/style.css'
 import router from './router'
 import store from './store'
 import axios from 'axios'
+// import qs from 'qs'
 //图片懒加载
 // import VueLazyload from 'vue-lazyload'
 
@@ -26,8 +27,12 @@ Vue.use(Indicator)
 //   attempt: 1
 // })
 
+// axios.defaults.baseURL="https://ele-interface.herokuapp.com/"
 //请求拦截
 axios.interceptors.request.use(config=>{
+  // if(config.method=='post'){
+  //     config.data=qs.stringify(config.data)
+  // }
   //加载动画
   Indicator.open()
   return config

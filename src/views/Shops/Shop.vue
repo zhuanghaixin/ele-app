@@ -175,7 +175,7 @@
         margin-top: 1.733333vw;
         color: #666;
         text-align: center;
-        font-size: 0.6rem;
+        font-size: 0.8rem;
     }
 
     .rst-order span {
@@ -184,7 +184,7 @@
 
     .index-rst .rst-promotion {
         width: 80vw;
-        font-size: 0.6rem;
+        font-size: 0.8rem;
         color: #999;
         overflow: hidden;
         text-overflow: ellipsis;
